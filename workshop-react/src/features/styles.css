@@ -1,0 +1,80 @@
+.app-container {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-width: 100vw;
+}
+
+.sidebar {
+  width: 20%;
+  border-right: 1px solid gray;
+  padding: 20px;
+}
+
+.main-content {
+  width: 80%;
+  padding: 20px;
+}
+
+.bio-textarea {
+  width: 100%;
+  height: 200px;
+  margin-top: 10px;
+}
+
+.update-button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.update-button:hover {
+  background-color: #45a049;
+}
+
+.user-profile {
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.edit-bio-button {
+  padding: 5px 10px;
+  background-color: #008CBA;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.edit-bio-button:hover {
+  background-color: #005f73;
+}
+
+.app-container {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 20%;
+  border-right: 1px solid gray;
+  padding: 20px;
+}
+
+.editor-buttons button {
+  margin-right: 10px;
+  padding: 5px;
+}
+
+.text-area {
+  border: 1px solid #ccc;
+  margin-top: 10px;
+  padding: 10px;
+  height: 150px;
+  overflow-y: auto;
+}

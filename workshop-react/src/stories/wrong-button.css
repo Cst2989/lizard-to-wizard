@@ -1,0 +1,162 @@
+/**
+ * Remove focus styles for non-keyboard focus.
+ */
+ :focus:not(:focus-visible) {
+  outline: 0;
+  box-shadow: none;
+}
+
+/**
+ * Cross-browser styles for explicit focus via 
+ * keyboard-based (eg Tab) navigation or the
+ * .focus-visible utility class.
+ */
+:focus,
+.focus-visible:focus:not(:focus-visible) {
+  outline: 4px solid var(--Secondary-A600, #42A3A3);
+  border: 1px solid #fff;
+}
+
+.storybook-button {
+  font-family: 'Inter';
+  font-weight: 500;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-self: center;
+  line-height: 18px;
+  border: 1px solid #fff;
+  column-gap: 8px;
+}
+
+.storybook-button i {
+  font-weight: 700;
+}
+
+.storybook-button--right {
+  flex-direction: row-reverse;
+}
+
+.storybook-button--Primary {
+  color: var(--bw-white, #FFF);
+  background-color: #1ea7fd;
+  background: var(--Button-Primary-Hover, #5322A1);
+}
+
+
+
+.storybook-button--Primary:hover {
+  background: var(--Button-Primary-Hover, #5322A1);
+}
+
+/* Increased specificity for active state */
+.storybook-button--Primary:active,
+.storybook-button--Primary.storybook-button:focus:active {
+  background: var(--Button-Primary-Active, #311461);
+}
+
+.storybook-button--Primary:disabled {
+  background: var(--Button-Primary-Disabled, #D2BEF3);
+}
+
+.storybook-button--Secondary {
+  border: 1px solid var(--Button-Secondary-Default, #6329C2);
+  background: var(--Button-Secondary-Hover, #E9E0F9);
+  color: var(--Button-Secondary-Default, #6329C2);
+}
+
+.storybook-button--Secondary:hover {
+  border: 1px solid var(--Button-Secondary-Default, #6329C2);
+  background: var(--Button-Secondary-Hover, #E9E0F9);
+}
+
+.storybook-button--Secondary:active {
+  border-radius: 8px;
+  border: 1px solid var(--Button-Secondary-Default, #6329C2);
+  background: var(--Button-Secondary-Active, #D2BEF3);
+}
+
+.storybook-button--Secondary:disabled {
+  border: 1px solid var(--Button-Secondary-Disabled, #D2BEF3);
+  color: var(--Button-Secondary-Disabled, #D2BEF3);
+}
+
+.storybook-button--Ghost {
+  color: var(--Button-Ghost-Default, #6329C2);
+  background: var(--Button-Ghost-Hover, #E9E0F9);
+}
+
+.storybook-button--Ghost:hover {
+  background: var(--Button-Ghost-Hover, #E9E0F9);
+}
+
+.storybook-button--Ghost:active {
+  background: var(--Button-Ghost-Active, #D2BEF3);
+}
+
+.storybook-button--Ghost:disabled {
+  color: var(--Button-Ghost-Disabled, #D2BEF3);
+}
+
+.storybook-button--Tertiary {
+  border: 1px solid var(--Button-Tertiary-Default, #B3B5C2);
+  color: var(--Text-InkBase, #353539);
+}
+
+.storybook-button--Tertiary:hover {
+  border: 1px solid var(--Neutral-N200, #CAC9CE);
+  background: var(--Neutral-N100, #E8E8EA);
+}
+
+.storybook-button--Tertiary:disabled {
+  border: 1px solid var(--Oultine-Contrast, #B3B5C2);
+  color: var(--Text-InkSubtle, #A1A3AF);
+}
+
+.storybook-button--Tertiary:active {
+  border-radius: 8px;
+  border: 1px solid var(--Neutral-N300, #A8A6AF);
+  background: var(--Neutral-N200, #CAC9CE);
+}
+
+.storybook-button--Danger:hover {
+  background: var(--Red-Red500, #9A0000);
+}
+
+.storybook-button--Danger {
+  background: var(--Red-Red300, #C10000);
+  color: var(--bw-white, #FFF);
+}
+
+.storybook-button--Danger:active {
+  border-radius: 8px;
+  background: var(--Red-Red700, #740000);
+}
+
+.storybook-button--Danger:disabled {
+  background: var(--Red-Red200, #ECB0B0);
+}
+
+.storybook-button--small {
+  font-size: 12px;
+  height: 28px;
+  padding: 12px;
+  column-gap: 4px;
+  border-radius: 4px;
+}
+
+.storybook-button--medium {
+  font-size: 14px;
+  padding: 12px;
+  border-radius: 8px;
+  height: 38px;
+}
+
+.storybook-button--large {
+  font-size: 16px;
+  height: 48px;
+  padding: 16px;
+  border-radius: 8px;
+}
