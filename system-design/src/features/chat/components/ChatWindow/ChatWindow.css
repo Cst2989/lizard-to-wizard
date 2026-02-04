@@ -1,0 +1,38 @@
+/* Chat window styles */
+
+.chat-window {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.chat-window.empty {
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-state {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.5);
+  padding: 40px;
+}
+
+.empty-state svg {
+  width: 80px;
+  height: 80px;
+  opacity: 0.3;
+  margin-bottom: 20px;
+}
+
+.empty-state h3 {
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 14px;
+}

@@ -1,0 +1,28 @@
+/* Chat app main styles */
+
+.chat-app {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  color: white;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Responsive layout */
+@media (max-width: 768px) {
+  .chat-app {
+    flex-direction: column;
+  }
+  
+  .chat-app .conversation-list {
+    width: 100%;
+    height: 50%;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .chat-app .chat-window {
+    height: 50%;
+  }
+}
