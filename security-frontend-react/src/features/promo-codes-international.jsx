@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useTranslation, I18nextProvider } from 'react-i18next';
+import { useTranslation, I18nextProvider } from '../../node_modules/react-i18next';
 import i18n from '../util/i18n';
 import Dompurify from 'dompurify';
 const RedeemPromoContent = () => {
