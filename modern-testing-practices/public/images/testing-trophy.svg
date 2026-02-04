@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 380">
+  <defs>
+    <linearGradient id="staticGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#a78bfa;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="unitGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4ade80;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#22c55e;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="integrationGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="e2eGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f87171;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ef4444;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#fcd34d;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Trophy Cup Top -->
+  <ellipse cx="200" cy="35" rx="45" ry="15" fill="url(#goldGrad)" stroke="#d97706" stroke-width="2"/>
+  <path d="M155,35 Q155,10 200,10 Q245,10 245,35" fill="url(#goldGrad)" stroke="#d97706" stroke-width="2"/>
+  
+  <!-- Trophy Handles -->
+  <path d="M155,35 Q120,35 120,60 Q120,85 155,85" fill="none" stroke="url(#goldGrad)" stroke-width="8" stroke-linecap="round"/>
+  <path d="M245,35 Q280,35 280,60 Q280,85 245,85" fill="none" stroke="url(#goldGrad)" stroke-width="8" stroke-linecap="round"/>
+  
+  <!-- E2E Layer (Top of trophy body) -->
+  <path d="M155,35 L155,70 Q155,85 170,90 L230,90 Q245,85 245,70 L245,35" fill="url(#e2eGrad2)" stroke="#fff" stroke-width="1"/>
+  <text x="200" y="70" text-anchor="middle" fill="white" font-family="Inter, sans-serif" font-size="11" font-weight="600">E2E</text>
+  
+  <!-- Integration Layer (LARGEST - Main trophy body) -->
+  <path d="M170,90 L160,180 Q158,200 180,205 L220,205 Q242,200 240,180 L230,90" fill="url(#integrationGrad)" stroke="#fff" stroke-width="2"/>
+  <text x="200" y="140" text-anchor="middle" fill="white" font-family="Inter, sans-serif" font-size="14" font-weight="700">Integration</text>
+  <text x="200" y="158" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-family="Inter, sans-serif" font-size="10">MOST TESTS</text>
+  
+  <!-- Component/Unit Layer -->
+  <polygon points="180,205 220,205 235,250 165,250" fill="url(#unitGrad2)" stroke="#fff" stroke-width="2"/>
+  <text x="200" y="235" text-anchor="middle" fill="white" font-family="Inter, sans-serif" font-size="11" font-weight="600">Unit</text>
+  
+  <!-- Static Analysis Layer (Base) -->
+  <rect x="140" y="250" width="120" height="35" rx="5" fill="url(#staticGrad)" stroke="#fff" stroke-width="2"/>
+  <text x="200" y="273" text-anchor="middle" fill="white" font-family="Inter, sans-serif" font-size="11" font-weight="600">Static Analysis</text>
+  
+  <!-- Trophy Base/Pedestal -->
+  <rect x="160" y="285" width="80" height="15" rx="3" fill="url(#goldGrad)" stroke="#d97706" stroke-width="1"/>
+  <rect x="150" y="300" width="100" height="20" rx="4" fill="url(#goldGrad)" stroke="#d97706" stroke-width="2"/>
+  
+  <!-- Labels on right side -->
+  <text x="290" y="70" fill="#f87171" font-family="Inter, sans-serif" font-size="10">Few E2E tests</text>
+  
+  <text x="290" y="135" fill="#667eea" font-family="Inter, sans-serif" font-size="10">Best ROI!</text>
+  <text x="290" y="150" fill="#667eea" font-family="Inter, sans-serif" font-size="10">Most tests here</text>
+  
+  <text x="290" y="235" fill="#4ade80" font-family="Inter, sans-serif" font-size="10">Pure functions</text>
+  
+  <text x="290" y="270" fill="#a78bfa" font-family="Inter, sans-serif" font-size="10">TypeScript, ESLint</text>
+  
+  <!-- Title -->
+  <text x="200" y="350" text-anchor="middle" fill="#a0a0a0" font-family="Inter, sans-serif" font-size="14">Testing Trophy by Kent C. Dodds</text>
+</svg>
