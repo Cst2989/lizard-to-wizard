@@ -1,0 +1,158 @@
+{
+  "type": "list",
+  "children": [
+    {
+      "type": "grid",
+      "props": { "columns": 2 },
+      "children": [
+        {
+          "type": "restaurant-card",
+          "props": {
+            "id": "1",
+            "name": "Sushi Palace",
+            "imageUrl": "https://placehold.co/400x300/ec4899/white?text=Sushi+Palace",
+            "rating": 4.5,
+            "deliveryTime": "25-35 min",
+            "cuisine": "Japanese",
+            "priceRange": "$$"
+          },
+          "actions": [{ "type": "navigate", "payload": { "to": "/restaurant/1" } }]
+        },
+        {
+          "type": "restaurant-card",
+          "props": {
+            "id": "2",
+            "name": "Bella Napoli",
+            "imageUrl": "https://placehold.co/400x300/ef4444/white?text=Bella+Napoli",
+            "rating": 4.8,
+            "deliveryTime": "20-30 min",
+            "cuisine": "Italian",
+            "priceRange": "$$$"
+          },
+          "actions": [{ "type": "navigate", "payload": { "to": "/restaurant/2" } }]
+        },
+        {
+          "type": "restaurant-card",
+          "props": {
+            "id": "3",
+            "name": "Thai Garden",
+            "imageUrl": "https://placehold.co/400x300/22c55e/white?text=Thai+Garden",
+            "rating": 4.3,
+            "deliveryTime": "30-40 min",
+            "cuisine": "Thai",
+            "priceRange": "$$"
+          },
+          "actions": [{ "type": "navigate", "payload": { "to": "/restaurant/3" } }]
+        },
+        {
+          "type": "restaurant-card",
+          "props": {
+            "id": "4",
+            "name": "Burger Barn",
+            "imageUrl": "https://placehold.co/400x300/a855f7/white?text=Burger+Barn",
+            "rating": 4.1,
+            "deliveryTime": "15-25 min",
+            "cuisine": "American",
+            "priceRange": "$"
+          },
+          "actions": [{ "type": "navigate", "payload": { "to": "/restaurant/4" } }]
+        }
+      ]
+    },
+    {
+      "type": "offer-banner",
+      "props": {
+        "title": "Flash Sale: 50% off your first order!",
+        "description": "Use code FIRST50 at checkout - limited time only",
+        "offerType": "50off",
+        "backgroundColor": "#dc2626",
+        "textColor": "#ffffff"
+      }
+    },
+    {
+      "type": "grid",
+      "props": { "columns": 2 },
+      "children": [
+        {
+          "type": "restaurant-card",
+          "props": {
+            "id": "5",
+            "name": "Taco Fiesta",
+            "imageUrl": "https://placehold.co/400x300/f59e0b/white?text=Taco+Fiesta",
+            "rating": 4.6,
+            "deliveryTime": "20-30 min",
+            "cuisine": "Mexican",
+            "priceRange": "$$"
+          },
+          "actions": [{ "type": "navigate", "payload": { "to": "/restaurant/5" } }]
+        },
+        {
+          "type": "restaurant-card",
+          "props": {
+            "id": "6",
+            "name": "Dragon Wok",
+            "imageUrl": "https://placehold.co/400x300/dc2626/white?text=Dragon+Wok",
+            "rating": 4.4,
+            "deliveryTime": "25-35 min",
+            "cuisine": "Chinese",
+            "priceRange": "$$"
+          },
+          "actions": [{ "type": "navigate", "payload": { "to": "/restaurant/6" } }]
+        },
+        {
+          "type": "restaurant-card",
+          "props": {
+            "id": "7",
+            "name": "Kebab Kingdom",
+            "imageUrl": "https://placehold.co/400x300/84cc16/white?text=Kebab+Kingdom",
+            "rating": 4.2,
+            "deliveryTime": "15-25 min",
+            "cuisine": "Middle Eastern",
+            "priceRange": "$"
+          },
+          "actions": [{ "type": "navigate", "payload": { "to": "/restaurant/7" } }]
+        },
+        {
+          "type": "restaurant-card",
+          "props": {
+            "id": "8",
+            "name": "Le Petit Bistro",
+            "imageUrl": "https://placehold.co/400x300/6366f1/white?text=Le+Petit+Bistro",
+            "rating": 4.7,
+            "deliveryTime": "30-45 min",
+            "cuisine": "French",
+            "priceRange": "$$$"
+          },
+          "actions": [{ "type": "navigate", "payload": { "to": "/restaurant/8" } }]
+        }
+      ]
+    },
+    {
+      "type": "banner",
+      "props": {
+        "imageUrl": "https://placehold.co/800x300/f97316/white?text=50%25+Off+Thai+Food",
+        "title": "50% off Thai Food",
+        "subtitle": "This weekend only"
+      },
+      "actions": [{ "type": "navigate", "payload": { "to": "/restaurant/3" } }]
+    },
+    {
+      "type": "banner",
+      "props": {
+        "imageUrl": "https://placehold.co/800x300/3b82f6/white?text=Free+Delivery",
+        "title": "Free Delivery",
+        "subtitle": "On orders over $25"
+      }
+    },
+    {
+      "type": "offer-banner",
+      "props": {
+        "title": "2 FOR 1 on Burger Barn today only!",
+        "description": "Buy any burger, get one free - dine in or delivery",
+        "offerType": "2for1",
+        "backgroundColor": "#7c3aed",
+        "textColor": "#ffffff"
+      }
+    }
+  ]
+}

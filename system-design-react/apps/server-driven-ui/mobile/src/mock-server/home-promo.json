@@ -1,0 +1,85 @@
+{
+  "type": "list",
+  "children": [
+    {
+      "type": "banner",
+      "props": {
+        "imageUrl": "https://placehold.co/800x300/dc2626/white?text=Holiday+Special",
+        "title": "Holiday Special!",
+        "subtitle": "Free delivery on all orders this week"
+      }
+    },
+    {
+      "type": "banner",
+      "props": {
+        "imageUrl": "https://placehold.co/800x200/f59e0b/white?text=Featured+Restaurants",
+        "title": "Featured Restaurants",
+        "subtitle": "Hand-picked by our editors"
+      }
+    },
+    {
+      "type": "grid",
+      "props": { "columns": 2 },
+      "children": [
+        {
+          "type": "restaurant-card",
+          "props": {
+            "id": "2",
+            "name": "Bella Napoli - Featured",
+            "imageUrl": "https://placehold.co/400x300/ef4444/white?text=Bella+Napoli",
+            "rating": 4.8,
+            "deliveryTime": "20-30 min",
+            "cuisine": "Italian",
+            "priceRange": "$$$"
+          },
+          "actions": [{ "type": "navigate", "payload": { "to": "/restaurant/2" } }]
+        },
+        {
+          "type": "restaurant-card",
+          "props": {
+            "id": "3",
+            "name": "Thai Garden - Featured",
+            "imageUrl": "https://placehold.co/400x300/22c55e/white?text=Thai+Garden",
+            "rating": 4.3,
+            "deliveryTime": "30-40 min",
+            "cuisine": "Thai",
+            "priceRange": "$$"
+          },
+          "actions": [{ "type": "navigate", "payload": { "to": "/restaurant/3" } }]
+        }
+      ]
+    },
+    {
+      "type": "grid",
+      "props": { "columns": 2 },
+      "children": [
+        {
+          "type": "restaurant-card",
+          "props": {
+            "id": "1",
+            "name": "Sushi Palace",
+            "imageUrl": "https://placehold.co/400x300/ec4899/white?text=Sushi+Palace",
+            "rating": 4.5,
+            "deliveryTime": "25-35 min",
+            "cuisine": "Japanese",
+            "priceRange": "$$"
+          },
+          "actions": [{ "type": "navigate", "payload": { "to": "/restaurant/1" } }]
+        },
+        {
+          "type": "restaurant-card",
+          "props": {
+            "id": "4",
+            "name": "Burger Barn",
+            "imageUrl": "https://placehold.co/400x300/a855f7/white?text=Burger+Barn",
+            "rating": 4.1,
+            "deliveryTime": "15-25 min",
+            "cuisine": "American",
+            "priceRange": "$"
+          },
+          "actions": [{ "type": "navigate", "payload": { "to": "/restaurant/4" } }]
+        }
+      ]
+    }
+  ]
+}

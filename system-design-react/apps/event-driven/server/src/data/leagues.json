@@ -1,0 +1,6 @@
+[
+  { "id": "pl", "name": "Premier League", "country": "England", "icon": "england.png" },
+  { "id": "laliga", "name": "La Liga", "country": "Spain", "icon": "spain.png" },
+  { "id": "seriea", "name": "Serie A", "country": "Italy", "icon": "italy.png" },
+  { "id": "bundes", "name": "Bundesliga", "country": "Germany", "icon": "germany.png" }
+]

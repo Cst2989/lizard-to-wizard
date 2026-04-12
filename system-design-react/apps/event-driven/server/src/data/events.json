@@ -1,0 +1,70 @@
+{
+  "m1": [
+    { "type": "MATCH_STARTED", "payload": { "homeTeam": "Arsenal", "awayTeam": "Chelsea", "competition": "Premier League" }, "timestamp": 0 },
+    { "type": "GOAL_SCORED", "payload": { "player": "Saka", "team": "home", "assist": "Odegaard", "minute": 23 }, "timestamp": 23 },
+    { "type": "CARD_GIVEN", "payload": { "player": "Palmer", "team": "away", "card": "yellow", "reason": "Tactical foul", "minute": 31 }, "timestamp": 31 },
+    { "type": "VAR_REVIEW", "payload": { "decision": "goal_stands", "originalCall": "onside", "minute": 23 }, "timestamp": 24 },
+    { "type": "HALF_TIME", "payload": { "homeScore": 1, "awayScore": 0 }, "timestamp": 45 },
+    { "type": "SECOND_HALF", "payload": {}, "timestamp": 46 },
+    { "type": "GOAL_SCORED", "payload": { "player": "Palmer", "team": "away", "assist": "Madueke", "minute": 52 }, "timestamp": 52 },
+    { "type": "SUBSTITUTION", "payload": { "teamSide": "away", "playerOut": "Mudryk", "playerIn": "Nkunku", "minute": 58 }, "timestamp": 58 },
+    { "type": "CARD_GIVEN", "payload": { "player": "Rice", "team": "home", "card": "yellow", "reason": "Time wasting", "minute": 62 }, "timestamp": 62 },
+    { "type": "GOAL_SCORED", "payload": { "player": "Havertz", "team": "home", "assist": "Saka", "minute": 67 }, "timestamp": 67 }
+  ],
+  "m2": [
+    { "type": "MATCH_STARTED", "payload": { "homeTeam": "Liverpool", "awayTeam": "Manchester City", "competition": "Premier League" }, "timestamp": 0 },
+    { "type": "GOAL_SCORED", "payload": { "player": "Salah", "team": "home", "assist": "Alexander-Arnold", "minute": 12 }, "timestamp": 12 },
+    { "type": "GOAL_SCORED", "payload": { "player": "Haaland", "team": "away", "assist": "De Bruyne", "minute": 28 }, "timestamp": 28 },
+    { "type": "CARD_GIVEN", "payload": { "player": "Rodri", "team": "away", "card": "yellow", "reason": "Late tackle", "minute": 35 }, "timestamp": 35 },
+    { "type": "HALF_TIME", "payload": { "homeScore": 1, "awayScore": 1 }, "timestamp": 45 },
+    { "type": "SECOND_HALF", "payload": {}, "timestamp": 46 },
+    { "type": "GOAL_SCORED", "payload": { "player": "Nunez", "team": "home", "assist": "Diaz", "minute": 55 }, "timestamp": 55 },
+    { "type": "SUBSTITUTION", "payload": { "teamSide": "away", "playerOut": "Grealish", "playerIn": "Foden", "minute": 60 }, "timestamp": 60 },
+    { "type": "GOAL_SCORED", "payload": { "player": "Foden", "team": "away", "assist": "Haaland", "minute": 72 }, "timestamp": 72 },
+    { "type": "PENALTY", "payload": { "player": "Salah", "team": "home", "scored": true, "minute": 78 }, "timestamp": 78 },
+    { "type": "GOAL_SCORED", "payload": { "player": "Salah", "team": "home", "assist": null, "minute": 78 }, "timestamp": 78 },
+    { "type": "MATCH_ENDED", "payload": { "homeScore": 3, "awayScore": 2, "result": "home_win" }, "timestamp": 90 }
+  ],
+  "m3": [
+    { "type": "MATCH_STARTED", "payload": { "homeTeam": "Real Madrid", "awayTeam": "Barcelona", "competition": "La Liga" }, "timestamp": 0 },
+    { "type": "CARD_GIVEN", "payload": { "player": "Tchouameni", "team": "home", "card": "yellow", "reason": "Professional foul", "minute": 15 }, "timestamp": 15 },
+    { "type": "GOAL_SCORED", "payload": { "player": "Lewandowski", "team": "away", "assist": "Pedri", "minute": 27 }, "timestamp": 27 },
+    { "type": "VAR_REVIEW", "payload": { "decision": "goal_awarded", "originalCall": "offside", "minute": 27 }, "timestamp": 28 },
+    { "type": "SUBSTITUTION", "payload": { "teamSide": "home", "playerOut": "Modric", "playerIn": "Camavinga", "minute": 30 }, "timestamp": 30 }
+  ],
+  "m4": [],
+  "m5": [
+    { "type": "MATCH_STARTED", "payload": { "homeTeam": "AC Milan", "awayTeam": "Inter Milan", "competition": "Serie A" }, "timestamp": 0 },
+    { "type": "GOAL_SCORED", "payload": { "player": "Lautaro Martinez", "team": "away", "assist": "Barella", "minute": 18 }, "timestamp": 18 },
+    { "type": "CARD_GIVEN", "payload": { "player": "Theo Hernandez", "team": "home", "card": "yellow", "reason": "Reckless challenge", "minute": 25 }, "timestamp": 25 },
+    { "type": "GOAL_SCORED", "payload": { "player": "Leao", "team": "home", "assist": "Pulisic", "minute": 38 }, "timestamp": 38 },
+    { "type": "HALF_TIME", "payload": { "homeScore": 1, "awayScore": 1 }, "timestamp": 45 },
+    { "type": "SECOND_HALF", "payload": {}, "timestamp": 46 },
+    { "type": "SUBSTITUTION", "payload": { "teamSide": "home", "playerOut": "Giroud", "playerIn": "Jovic", "minute": 50 }, "timestamp": 50 }
+  ],
+  "m6": [
+    { "type": "MATCH_STARTED", "payload": { "homeTeam": "Juventus", "awayTeam": "Napoli", "competition": "Serie A" }, "timestamp": 0 },
+    { "type": "CARD_GIVEN", "payload": { "player": "Bremer", "team": "home", "card": "yellow", "reason": "Holding", "minute": 20 }, "timestamp": 20 },
+    { "type": "GOAL_SCORED", "payload": { "player": "Osimhen", "team": "away", "assist": "Kvaratskhelia", "minute": 33 }, "timestamp": 33 },
+    { "type": "HALF_TIME", "payload": { "homeScore": 0, "awayScore": 1 }, "timestamp": 45 },
+    { "type": "SECOND_HALF", "payload": {}, "timestamp": 46 },
+    { "type": "CARD_GIVEN", "payload": { "player": "Bremer", "team": "home", "card": "red", "reason": "Second yellow", "minute": 55 }, "timestamp": 55 },
+    { "type": "SUBSTITUTION", "payload": { "teamSide": "home", "playerOut": "Vlahovic", "playerIn": "Milik", "minute": 60 }, "timestamp": 60 },
+    { "type": "GOAL_SCORED", "payload": { "player": "Kvaratskhelia", "team": "away", "assist": "Osimhen", "minute": 74 }, "timestamp": 74 },
+    { "type": "MATCH_ENDED", "payload": { "homeScore": 0, "awayScore": 2, "result": "away_win" }, "timestamp": 90 }
+  ],
+  "m7": [
+    { "type": "MATCH_STARTED", "payload": { "homeTeam": "Bayern Munich", "awayTeam": "Borussia Dortmund", "competition": "Bundesliga" }, "timestamp": 0 },
+    { "type": "GOAL_SCORED", "payload": { "player": "Kane", "team": "home", "assist": "Musiala", "minute": 11 }, "timestamp": 11 },
+    { "type": "GOAL_SCORED", "payload": { "player": "Fullkrug", "team": "away", "assist": "Sancho", "minute": 22 }, "timestamp": 22 },
+    { "type": "CARD_GIVEN", "payload": { "player": "Schlotterbeck", "team": "away", "card": "yellow", "reason": "Simulation", "minute": 30 }, "timestamp": 30 },
+    { "type": "GOAL_SCORED", "payload": { "player": "Sane", "team": "home", "assist": "Kane", "minute": 40 }, "timestamp": 40 },
+    { "type": "HALF_TIME", "payload": { "homeScore": 2, "awayScore": 1 }, "timestamp": 45 },
+    { "type": "SECOND_HALF", "payload": {}, "timestamp": 46 },
+    { "type": "SUBSTITUTION", "payload": { "teamSide": "away", "playerOut": "Brandt", "playerIn": "Reus", "minute": 55 }, "timestamp": 55 },
+    { "type": "PENALTY", "payload": { "player": "Kane", "team": "home", "scored": true, "minute": 65 }, "timestamp": 65 },
+    { "type": "GOAL_SCORED", "payload": { "player": "Kane", "team": "home", "assist": null, "minute": 65 }, "timestamp": 65 },
+    { "type": "CARD_GIVEN", "payload": { "player": "Hummels", "team": "away", "card": "yellow", "reason": "Penalty foul", "minute": 64 }, "timestamp": 64 }
+  ],
+  "m8": []
+}

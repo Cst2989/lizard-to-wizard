@@ -1,0 +1,96 @@
+{
+  "paris": [
+    {
+      "hotel_id": "htl_001",
+      "hotel_name": "Le Petit Paris",
+      "star_rating": 4,
+      "address": { "street": "12 Rue de Rivoli", "district": "1st Arr.", "city": "Paris" },
+      "price_per_night": "185.50",
+      "currency_code": "EUR",
+      "total_price": "1298.50",
+      "amenities": ["wifi", "breakfast", "pool"],
+      "review_score": "8.7",
+      "review_count": 342,
+      "images": ["https://example.com/hotel1.jpg"],
+      "available_rooms": 3
+    },
+    {
+      "hotel_id": "htl_002",
+      "hotel_name": "Hotel de la Paix",
+      "star_rating": 3,
+      "address": { "street": "45 Boulevard Saint-Germain", "district": "5th Arr.", "city": "Paris" },
+      "price_per_night": "120.00",
+      "currency_code": "EUR",
+      "total_price": "840.00",
+      "amenities": ["wifi", "breakfast"],
+      "review_score": "7.9",
+      "review_count": 198,
+      "images": ["https://example.com/hotel2.jpg"],
+      "available_rooms": 7
+    }
+  ],
+  "tokyo": [
+    {
+      "hotel_id": "htl_010",
+      "hotel_name": "Shinjuku Granbell Hotel",
+      "star_rating": 4,
+      "address": { "street": "2-14-5 Kabukicho", "district": "Shinjuku", "city": "Tokyo" },
+      "price_per_night": "15000",
+      "currency_code": "JPY",
+      "total_price": "105000",
+      "amenities": ["wifi", "onsen", "restaurant"],
+      "review_score": "9.1",
+      "review_count": 567,
+      "images": ["https://example.com/hotel10.jpg"],
+      "available_rooms": 5
+    }
+  ],
+  "new york": [
+    {
+      "hotel_id": "htl_020",
+      "hotel_name": "The Manhattan Inn",
+      "star_rating": 3,
+      "address": { "street": "310 W 40th St", "district": "Midtown", "city": "New York" },
+      "price_per_night": "199.00",
+      "currency_code": "USD",
+      "total_price": "1393.00",
+      "amenities": ["wifi", "gym", "bar"],
+      "review_score": "7.5",
+      "review_count": 421,
+      "images": ["https://example.com/hotel20.jpg"],
+      "available_rooms": 12
+    }
+  ],
+  "barcelona": [
+    {
+      "hotel_id": "htl_030",
+      "hotel_name": "Casa Bonay",
+      "star_rating": 4,
+      "address": { "street": "Gran Via 700", "district": "Eixample", "city": "Barcelona" },
+      "price_per_night": "165.00",
+      "currency_code": "EUR",
+      "total_price": "1155.00",
+      "amenities": ["wifi", "rooftop", "breakfast", "pool"],
+      "review_score": "8.9",
+      "review_count": 289,
+      "images": ["https://example.com/hotel30.jpg"],
+      "available_rooms": 4
+    }
+  ],
+  "rome": [
+    {
+      "hotel_id": "htl_040",
+      "hotel_name": "Hotel Artemide",
+      "star_rating": 4,
+      "address": { "street": "Via Nazionale 22", "district": "Centro Storico", "city": "Rome" },
+      "price_per_night": "175.00",
+      "currency_code": "EUR",
+      "total_price": "1225.00",
+      "amenities": ["wifi", "spa", "breakfast", "restaurant"],
+      "review_score": "9.0",
+      "review_count": 512,
+      "images": ["https://example.com/hotel40.jpg"],
+      "available_rooms": 6
+    }
+  ]
+}

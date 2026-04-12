@@ -1,0 +1,103 @@
+.container {
+  background: #1a1d23;
+  border-radius: 8px;
+  padding: 16px;
+  border: 1px solid #2a2d35;
+}
+
+.title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+.pitch {
+  background: #1b5e20;
+  border-radius: 6px;
+  padding: 16px;
+  min-height: 200px;
+  position: relative;
+  border: 2px solid #2e7d32;
+}
+
+.halfLine {
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.centerCircle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.teamSection {
+  margin-bottom: 16px;
+}
+
+.teamSection:last-child {
+  margin-bottom: 0;
+}
+
+.teamLabel {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.players {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.player {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.playerSubbed {
+  composes: player;
+  opacity: 0.4;
+  text-decoration: line-through;
+}
+
+.playerRed {
+  composes: player;
+  background: rgba(239, 68, 68, 0.25);
+  color: #fca5a5;
+}
+
+.subIn {
+  composes: player;
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px dashed rgba(16, 185, 129, 0.4);
+}
+
+.empty {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 13px;
+  text-align: center;
+  padding: 40px 20px;
+}

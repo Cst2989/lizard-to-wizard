@@ -1,0 +1,62 @@
+.container {
+  background: #1a1d23;
+  border-radius: 8px;
+  padding: 16px;
+  border: 1px solid #2a2d35;
+}
+
+.title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+.entries {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.entry {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #d1d5db;
+  padding: 8px 10px;
+  background: #22252d;
+  border-radius: 6px;
+  border-left: 3px solid #374151;
+}
+
+.entryGoal {
+  composes: entry;
+  border-left-color: #10b981;
+  background: rgba(16, 185, 129, 0.05);
+}
+
+.entryCard {
+  composes: entry;
+  border-left-color: #f59e0b;
+}
+
+.entryRedCard {
+  composes: entry;
+  border-left-color: #ef4444;
+}
+
+.minute {
+  font-weight: 700;
+  color: #6b7280;
+  margin-right: 6px;
+}
+
+.empty {
+  color: #4b5563;
+  font-size: 13px;
+  text-align: center;
+  padding: 20px;
+}

@@ -1,0 +1,30 @@
+.container {
+  background: #1a1d23;
+  border-radius: 8px;
+  padding: 16px;
+  border: 1px solid #2a2d35;
+}
+
+.title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+.events {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.empty {
+  color: #4b5563;
+  font-size: 13px;
+  text-align: center;
+  padding: 20px;
+}

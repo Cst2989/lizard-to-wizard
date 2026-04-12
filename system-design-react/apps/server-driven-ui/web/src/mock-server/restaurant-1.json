@@ -1,0 +1,106 @@
+{
+  "type": "list",
+  "children": [
+    {
+      "type": "banner",
+      "props": {
+        "imageUrl": "https://placehold.co/800x300/ec4899/white?text=Sushi+Palace",
+        "title": "Sushi Palace",
+        "subtitle": "4.5 stars - Japanese - 25-35 min"
+      }
+    },
+    {
+      "type": "list",
+      "children": [
+        {
+          "type": "food-item-row",
+          "props": {
+            "id": "f1",
+            "name": "Dragon Roll",
+            "description": "Shrimp tempura, avocado, eel sauce",
+            "price": 14.99,
+            "imageUrl": "https://placehold.co/60x60/f472b6/white?text=Dragon"
+          },
+          "actions": [{ "type": "add-to-cart", "payload": { "itemId": "f1", "price": 14.99 } }]
+        },
+        {
+          "type": "food-item-row",
+          "props": {
+            "id": "f2",
+            "name": "Salmon Nigiri",
+            "description": "Fresh Atlantic salmon over seasoned rice",
+            "price": 9.99,
+            "imageUrl": "https://placehold.co/60x60/fb923c/white?text=Salmon"
+          },
+          "actions": [{ "type": "add-to-cart", "payload": { "itemId": "f2", "price": 9.99 } }]
+        },
+        {
+          "type": "food-item-row",
+          "props": {
+            "id": "f3",
+            "name": "Miso Soup",
+            "description": "Traditional soybean soup with tofu and seaweed",
+            "price": 4.99,
+            "imageUrl": "https://placehold.co/60x60/fbbf24/white?text=Miso"
+          },
+          "actions": [{ "type": "add-to-cart", "payload": { "itemId": "f3", "price": 4.99 } }]
+        },
+        {
+          "type": "food-item-row",
+          "props": {
+            "id": "f4",
+            "name": "Edamame",
+            "description": "Steamed soybeans with sea salt",
+            "price": 5.99,
+            "imageUrl": "https://placehold.co/60x60/86efac/white?text=Edamame"
+          },
+          "actions": [{ "type": "add-to-cart", "payload": { "itemId": "f4", "price": 5.99 } }]
+        },
+        {
+          "type": "food-item-row",
+          "props": {
+            "id": "f5",
+            "name": "Tempura Platter",
+            "description": "Assorted shrimp and vegetable tempura",
+            "price": 16.99,
+            "imageUrl": "https://placehold.co/60x60/c084fc/white?text=Tempura"
+          },
+          "actions": [{ "type": "add-to-cart", "payload": { "itemId": "f5", "price": 16.99 } }]
+        },
+        {
+          "type": "food-item-row",
+          "props": {
+            "id": "f6",
+            "name": "Ramen",
+            "description": "Rich tonkotsu broth with chashu pork and soft egg",
+            "price": 12.99,
+            "imageUrl": "https://placehold.co/60x60/f87171/white?text=Ramen"
+          },
+          "actions": [{ "type": "add-to-cart", "payload": { "itemId": "f6", "price": 12.99 } }]
+        },
+        {
+          "type": "food-item-row",
+          "props": {
+            "id": "f7",
+            "name": "California Roll",
+            "description": "Crab, avocado, cucumber with tobiko",
+            "price": 11.99,
+            "imageUrl": "https://placehold.co/60x60/38bdf8/white?text=Cali"
+          },
+          "actions": [{ "type": "add-to-cart", "payload": { "itemId": "f7", "price": 11.99 } }]
+        },
+        {
+          "type": "food-item-row",
+          "props": {
+            "id": "f8",
+            "name": "Gyoza",
+            "description": "Pan-fried pork dumplings with dipping sauce",
+            "price": 7.99,
+            "imageUrl": "https://placehold.co/60x60/a3e635/white?text=Gyoza"
+          },
+          "actions": [{ "type": "add-to-cart", "payload": { "itemId": "f8", "price": 7.99 } }]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,394 @@
+.app {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.subtitle {
+  color: #666;
+  margin: 0.25rem 0 0;
+}
+
+/* Search Form */
+.search-form {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.form-field label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #555;
+}
+
+.form-field select,
+.form-field input {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+
+.search-form button {
+  padding: 0.5rem 1.5rem;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.search-form button:disabled {
+  background: #93c5fd;
+  cursor: not-allowed;
+}
+
+/* Trip Summary */
+.trip-summary {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.trip-header {
+  margin-bottom: 1.5rem;
+}
+
+.trip-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.trip-header p {
+  color: #666;
+  margin: 0.25rem 0 0;
+}
+
+.trip-section {
+  margin-bottom: 2rem;
+}
+
+.trip-section h3 {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 0.5rem;
+}
+
+/* Card Grids */
+.card-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+.weather-grid {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+/* Flight Card */
+.flight-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.flight-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.airline {
+  font-weight: 600;
+}
+
+.direction-badge {
+  font-size: 0.75rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 12px;
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.direction-badge.return {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.flight-times {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.flight-duration {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.flight-card-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flight-price {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+/* Hotel Card */
+.hotel-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.hotel-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.hotel-card-header h3 {
+  margin: 0;
+  border: none;
+  padding: 0;
+  font-size: 1rem;
+}
+
+.stars {
+  color: #f59e0b;
+  font-size: 0.9rem;
+}
+
+.hotel-location {
+  color: #666;
+  font-size: 0.85rem;
+  margin: 0.25rem 0 0.75rem;
+}
+
+.hotel-card-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 0.75rem;
+}
+
+.hotel-pricing {
+  display: flex;
+  flex-direction: column;
+}
+
+.price-per-night {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+.price-per-night small {
+  font-weight: 400;
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.total-price {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.hotel-rating {
+  text-align: right;
+}
+
+.rating-score {
+  background: #2563eb;
+  color: white;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.review-count {
+  display: block;
+  font-size: 0.75rem;
+  color: #888;
+  margin-top: 0.2rem;
+}
+
+.hotel-amenities {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.amenity-tag {
+  font-size: 0.75rem;
+  background: #f3f4f6;
+  padding: 0.15rem 0.5rem;
+  border-radius: 12px;
+  color: #555;
+}
+
+/* Weather Badge */
+.weather-badge {
+  min-width: 100px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 0.75rem;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.weather-date {
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-bottom: 0.25rem;
+}
+
+.weather-condition {
+  font-size: 0.8rem;
+  color: #666;
+  margin-bottom: 0.25rem;
+}
+
+.weather-temps {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.temp-max {
+  font-weight: 700;
+}
+
+.temp-min {
+  color: #888;
+}
+
+.weather-detail {
+  font-size: 0.75rem;
+  color: #888;
+  margin-top: 0.25rem;
+}
+
+/* Price Breakdown */
+.price-breakdown {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.price-breakdown h3 {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.price-total {
+  font-weight: 700;
+  font-size: 1.1rem;
+  border-bottom: none;
+  border-top: 2px solid #333;
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+}
+
+/* Loading Skeleton */
+.loading-skeleton {
+  margin-top: 2rem;
+}
+
+.loading-text {
+  text-align: center;
+  color: #888;
+}
+
+.skeleton-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.skeleton-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.skeleton-line {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+}
+
+.skeleton-title {
+  height: 1.2rem;
+  width: 60%;
+}
+
+.skeleton-body {
+  height: 0.9rem;
+  width: 100%;
+}
+
+.skeleton-body.short {
+  width: 40%;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Error */
+.error-message {
+  background: #fef2f2;
+  color: #dc2626;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  margin-top: 1rem;
+}

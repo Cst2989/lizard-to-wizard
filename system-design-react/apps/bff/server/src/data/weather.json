@@ -1,0 +1,144 @@
+{
+  "Paris": {
+    "location": { "name": "Paris", "country": "FR", "lat": 48.8566, "lon": 2.3522 },
+    "forecast": [
+      {
+        "dt": 1780272000,
+        "temp": { "min": 288.15, "max": 298.15 },
+        "weather": { "id": 800, "main": "Clear", "description": "clear sky", "icon": "01d" },
+        "wind": { "speed": 3.2, "deg": 180 },
+        "humidity": 55,
+        "precipitation_probability": 0.1
+      },
+      {
+        "dt": 1780358400,
+        "temp": { "min": 286.15, "max": 295.15 },
+        "weather": { "id": 802, "main": "Clouds", "description": "scattered clouds", "icon": "03d" },
+        "wind": { "speed": 4.1, "deg": 200 },
+        "humidity": 62,
+        "precipitation_probability": 0.25
+      },
+      {
+        "dt": 1780444800,
+        "temp": { "min": 284.15, "max": 291.15 },
+        "weather": { "id": 500, "main": "Rain", "description": "light rain", "icon": "10d" },
+        "wind": { "speed": 5.5, "deg": 220 },
+        "humidity": 78,
+        "precipitation_probability": 0.7
+      },
+      {
+        "dt": 1780531200,
+        "temp": { "min": 287.15, "max": 296.15 },
+        "weather": { "id": 801, "main": "Clouds", "description": "few clouds", "icon": "02d" },
+        "wind": { "speed": 2.8, "deg": 160 },
+        "humidity": 50,
+        "precipitation_probability": 0.15
+      },
+      {
+        "dt": 1780617600,
+        "temp": { "min": 289.15, "max": 299.15 },
+        "weather": { "id": 800, "main": "Clear", "description": "clear sky", "icon": "01d" },
+        "wind": { "speed": 2.1, "deg": 140 },
+        "humidity": 45,
+        "precipitation_probability": 0.05
+      },
+      {
+        "dt": 1780704000,
+        "temp": { "min": 290.15, "max": 300.15 },
+        "weather": { "id": 800, "main": "Clear", "description": "clear sky", "icon": "01d" },
+        "wind": { "speed": 1.8, "deg": 120 },
+        "humidity": 40,
+        "precipitation_probability": 0.05
+      }
+    ],
+    "units": "standard"
+  },
+  "Tokyo": {
+    "location": { "name": "Tokyo", "country": "JP", "lat": 35.6762, "lon": 139.6503 },
+    "forecast": [
+      {
+        "dt": 1780272000,
+        "temp": { "min": 293.15, "max": 301.15 },
+        "weather": { "id": 500, "main": "Rain", "description": "light rain", "icon": "10d" },
+        "wind": { "speed": 4.5, "deg": 90 },
+        "humidity": 75,
+        "precipitation_probability": 0.6
+      },
+      {
+        "dt": 1780358400,
+        "temp": { "min": 294.15, "max": 302.15 },
+        "weather": { "id": 802, "main": "Clouds", "description": "scattered clouds", "icon": "03d" },
+        "wind": { "speed": 3.8, "deg": 110 },
+        "humidity": 70,
+        "precipitation_probability": 0.3
+      }
+    ],
+    "units": "standard"
+  },
+  "New York": {
+    "location": { "name": "New York", "country": "US", "lat": 40.7128, "lon": -74.006 },
+    "forecast": [
+      {
+        "dt": 1780272000,
+        "temp": { "min": 291.15, "max": 300.15 },
+        "weather": { "id": 800, "main": "Clear", "description": "clear sky", "icon": "01d" },
+        "wind": { "speed": 3.0, "deg": 270 },
+        "humidity": 50,
+        "precipitation_probability": 0.1
+      },
+      {
+        "dt": 1780358400,
+        "temp": { "min": 290.15, "max": 298.15 },
+        "weather": { "id": 801, "main": "Clouds", "description": "few clouds", "icon": "02d" },
+        "wind": { "speed": 4.2, "deg": 260 },
+        "humidity": 55,
+        "precipitation_probability": 0.2
+      }
+    ],
+    "units": "standard"
+  },
+  "Barcelona": {
+    "location": { "name": "Barcelona", "country": "ES", "lat": 41.3874, "lon": 2.1686 },
+    "forecast": [
+      {
+        "dt": 1780272000,
+        "temp": { "min": 291.15, "max": 299.15 },
+        "weather": { "id": 800, "main": "Clear", "description": "clear sky", "icon": "01d" },
+        "wind": { "speed": 2.5, "deg": 150 },
+        "humidity": 48,
+        "precipitation_probability": 0.05
+      },
+      {
+        "dt": 1780358400,
+        "temp": { "min": 292.15, "max": 301.15 },
+        "weather": { "id": 800, "main": "Clear", "description": "clear sky", "icon": "01d" },
+        "wind": { "speed": 2.0, "deg": 130 },
+        "humidity": 42,
+        "precipitation_probability": 0.05
+      }
+    ],
+    "units": "standard"
+  },
+  "Rome": {
+    "location": { "name": "Rome", "country": "IT", "lat": 41.9028, "lon": 12.4964 },
+    "forecast": [
+      {
+        "dt": 1780272000,
+        "temp": { "min": 292.15, "max": 302.15 },
+        "weather": { "id": 800, "main": "Clear", "description": "clear sky", "icon": "01d" },
+        "wind": { "speed": 2.0, "deg": 170 },
+        "humidity": 40,
+        "precipitation_probability": 0.05
+      },
+      {
+        "dt": 1780358400,
+        "temp": { "min": 293.15, "max": 303.15 },
+        "weather": { "id": 801, "main": "Clouds", "description": "few clouds", "icon": "02d" },
+        "wind": { "speed": 2.3, "deg": 180 },
+        "humidity": 38,
+        "precipitation_probability": 0.1
+      }
+    ],
+    "units": "standard"
+  }
+}

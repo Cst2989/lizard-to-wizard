@@ -1,0 +1,20 @@
+.dashboard {
+  display: flex;
+  height: 100vh;
+  background: #14161a;
+  color: #d1d5db;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.mainContent {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.matchArea {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}

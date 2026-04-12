@@ -1,0 +1,90 @@
+[
+  {
+    "id": "m1",
+    "leagueId": "pl",
+    "homeTeam": { "name": "Arsenal", "shortName": "ARS", "logo": "arsenal.png" },
+    "awayTeam": { "name": "Chelsea", "shortName": "CHE", "logo": "chelsea.png" },
+    "status": "live",
+    "currentMinute": 67,
+    "homeScore": 2,
+    "awayScore": 1,
+    "startTime": "2026-04-06T15:00:00Z"
+  },
+  {
+    "id": "m2",
+    "leagueId": "pl",
+    "homeTeam": { "name": "Liverpool", "shortName": "LIV", "logo": "liverpool.png" },
+    "awayTeam": { "name": "Manchester City", "shortName": "MCI", "logo": "mancity.png" },
+    "status": "finished",
+    "currentMinute": 90,
+    "homeScore": 3,
+    "awayScore": 2,
+    "startTime": "2026-04-06T12:30:00Z"
+  },
+  {
+    "id": "m3",
+    "leagueId": "laliga",
+    "homeTeam": { "name": "Real Madrid", "shortName": "RMA", "logo": "realmadrid.png" },
+    "awayTeam": { "name": "Barcelona", "shortName": "BAR", "logo": "barcelona.png" },
+    "status": "live",
+    "currentMinute": 34,
+    "homeScore": 0,
+    "awayScore": 1,
+    "startTime": "2026-04-06T20:00:00Z"
+  },
+  {
+    "id": "m4",
+    "leagueId": "laliga",
+    "homeTeam": { "name": "Atletico Madrid", "shortName": "ATM", "logo": "atletico.png" },
+    "awayTeam": { "name": "Sevilla", "shortName": "SEV", "logo": "sevilla.png" },
+    "status": "upcoming",
+    "currentMinute": 0,
+    "homeScore": 0,
+    "awayScore": 0,
+    "startTime": "2026-04-06T21:00:00Z"
+  },
+  {
+    "id": "m5",
+    "leagueId": "seriea",
+    "homeTeam": { "name": "AC Milan", "shortName": "MIL", "logo": "milan.png" },
+    "awayTeam": { "name": "Inter Milan", "shortName": "INT", "logo": "inter.png" },
+    "status": "live",
+    "currentMinute": 52,
+    "homeScore": 1,
+    "awayScore": 1,
+    "startTime": "2026-04-06T17:45:00Z"
+  },
+  {
+    "id": "m6",
+    "leagueId": "seriea",
+    "homeTeam": { "name": "Juventus", "shortName": "JUV", "logo": "juventus.png" },
+    "awayTeam": { "name": "Napoli", "shortName": "NAP", "logo": "napoli.png" },
+    "status": "finished",
+    "currentMinute": 90,
+    "homeScore": 0,
+    "awayScore": 2,
+    "startTime": "2026-04-06T14:00:00Z"
+  },
+  {
+    "id": "m7",
+    "leagueId": "bundes",
+    "homeTeam": { "name": "Bayern Munich", "shortName": "BAY", "logo": "bayern.png" },
+    "awayTeam": { "name": "Borussia Dortmund", "shortName": "BVB", "logo": "dortmund.png" },
+    "status": "live",
+    "currentMinute": 78,
+    "homeScore": 3,
+    "awayScore": 1,
+    "startTime": "2026-04-06T15:30:00Z"
+  },
+  {
+    "id": "m8",
+    "leagueId": "bundes",
+    "homeTeam": { "name": "RB Leipzig", "shortName": "RBL", "logo": "leipzig.png" },
+    "awayTeam": { "name": "Bayer Leverkusen", "shortName": "LEV", "logo": "leverkusen.png" },
+    "status": "upcoming",
+    "currentMinute": 0,
+    "homeScore": 0,
+    "awayScore": 0,
+    "startTime": "2026-04-06T19:30:00Z"
+  }
+]

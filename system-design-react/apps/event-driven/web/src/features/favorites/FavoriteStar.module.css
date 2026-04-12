@@ -1,0 +1,27 @@
+.star {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 4px;
+  transition: transform 0.15s;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.star:hover {
+  transform: scale(1.2);
+}
+
+.active {
+  composes: star;
+}
+
+.inactive {
+  composes: star;
+  opacity: 0.3;
+}
+
+.inactive:hover {
+  opacity: 0.6;
+}

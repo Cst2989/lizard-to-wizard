@@ -1,0 +1,39 @@
+.event {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #d1d5db;
+}
+
+.event:hover {
+  background: #22252d;
+}
+
+.minute {
+  font-size: 11px;
+  font-weight: 700;
+  color: #6b7280;
+  min-width: 32px;
+  text-align: right;
+}
+
+.icon {
+  font-size: 16px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.text {
+  flex: 1;
+}
+
+.goal { color: #10b981; }
+.card { color: #f59e0b; }
+.redCard { color: #ef4444; }
+.sub { color: #3b82f6; }
+.whistle { color: #9ca3af; }
+.var { color: #8b5cf6; }
+.penalty { color: #f97316; }

@@ -1,0 +1,81 @@
+.container {
+  background: #1a1d23;
+  border-radius: 8px;
+  padding: 16px;
+  border: 1px solid #2a2d35;
+}
+
+.title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.table th {
+  text-align: left;
+  color: #6b7280;
+  font-weight: 600;
+  padding: 6px 8px;
+  border-bottom: 1px solid #2a2d35;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.table td {
+  padding: 6px 8px;
+  color: #d1d5db;
+  border-bottom: 1px solid #1e2128;
+}
+
+.playerName {
+  font-weight: 500;
+  color: #fff;
+}
+
+.badge {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.goalBadge {
+  composes: badge;
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+
+.assistBadge {
+  composes: badge;
+  background: rgba(59, 130, 246, 0.15);
+  color: #3b82f6;
+}
+
+.yellowBadge {
+  composes: badge;
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+
+.redBadge {
+  composes: badge;
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+.empty {
+  color: #4b5563;
+  font-size: 13px;
+  text-align: center;
+  padding: 20px;
+}

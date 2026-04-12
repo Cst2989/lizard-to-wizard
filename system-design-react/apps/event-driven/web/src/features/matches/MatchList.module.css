@@ -1,0 +1,29 @@
+.container {
+  flex: 1;
+  overflow-y: auto;
+  min-width: 340px;
+  max-width: 420px;
+  border-right: 1px solid #2a2d35;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.empty {
+  padding: 40px 20px;
+  text-align: center;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.statusGroup {
+  padding: 8px 16px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #6b7280;
+  background: #14161a;
+}
