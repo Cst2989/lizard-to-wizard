@@ -1,6 +1,6 @@
 import app from './app.js';
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3009;
 
 app.listen(PORT, () => {
   console.log(`Event-driven server running on http://localhost:${PORT}`);

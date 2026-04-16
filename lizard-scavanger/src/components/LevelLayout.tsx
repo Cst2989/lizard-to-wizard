@@ -2,9 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { LevelContent } from "../levels/content";
 import type { LevelResponse } from "../lib/api";
-import { hitLevel, triggerAlert } from "../lib/api";
+import { hitLevel, triggerAlert, validateNextKey } from "../lib/api";
 
-type Phase = "lesson" | "hunting" | "finale";
+type Phase = "lesson" | "hunting" | "solved" | "finale";
 
 interface Props {
   content: LevelContent;
@@ -36,14 +36,22 @@ export function LevelLayout({ content, attendee, currentKey }: Props) {
     setPhase(content.n === FINAL_LEVEL ? "finale" : "hunting");
   }
 
-  function submitKey(e: React.FormEvent) {
+  async function submitKey(e: React.FormEvent) {
     e.preventDefault();
-    if (!content.keyPattern.test(typedKey.trim())) {
+    const typed = typedKey.trim();
+    if (!content.keyPattern.test(typed)) {
       setError(`Expected: ${content.keyFormatHint}`);
       return;
     }
+    setBusy(true);
     setError(null);
-    navigate(`/level/${content.n + 1}/${typedKey.trim().toUpperCase()}`);
+    const res = await validateNextKey(attendee, content.n + 1, typed);
+    setBusy(false);
+    if (!res.ok) {
+      setError("that's not the right key — keep hunting");
+      return;
+    }
+    setPhase("solved");
   }
 
   async function doTriggerAlert() {
@@ -56,6 +64,12 @@ export function LevelLayout({ content, attendee, currentKey }: Props) {
       return;
     }
     setTriggerMessage(res.data.message);
+  }
+
+  function continueToNext() {
+    navigate(
+      `/level/${content.n + 1}/${typedKey.trim().toUpperCase()}`,
+    );
   }
 
   return (
@@ -77,9 +91,11 @@ export function LevelLayout({ content, attendee, currentKey }: Props) {
             <p key={i}>{p}</p>
           ))}
           <button disabled={busy} onClick={startHunting}>
-            {busy ? "Preparing…" : content.n === FINAL_LEVEL
-              ? "Trigger the error →"
-              : "Start hunting →"}
+            {busy
+              ? "Preparing…"
+              : content.n === FINAL_LEVEL
+                ? "Trigger the error →"
+                : "Start hunting →"}
           </button>
           {error && <p style={{ color: "var(--bad)" }}>{error}</p>}
         </section>
@@ -90,11 +106,15 @@ export function LevelLayout({ content, attendee, currentKey }: Props) {
           <h3 style={{ marginTop: 0 }}>The hunt</h3>
           <ol>
             {content.instructions.map((step, i) => (
-              <li key={i}>{step}</li>
+              <li key={i}>{renderStep(step, attendee)}</li>
             ))}
           </ol>
 
-          <HuntSignals data={huntData} />
+          <HuntSignals
+            data={huntData}
+            hintDetails={content.hintDetails}
+            attendee={attendee}
+          />
 
           {content.n === 5 && (
             <div style={{ margin: "16px 0" }}>
@@ -127,32 +147,80 @@ export function LevelLayout({ content, attendee, currentKey }: Props) {
               onChange={(e) => setTypedKey(e.target.value)}
               autoFocus
             />
-            <button type="submit">Go →</button>
+            <button type="submit" disabled={busy}>
+              {busy ? "…" : "Submit"}
+            </button>
           </form>
           {error && <p style={{ color: "var(--bad)" }}>{error}</p>}
         </section>
       )}
 
-      {phase === "finale" && huntData && (
-        <section className="card" style={{ background: "rgba(129, 199, 132, 0.08)" }}>
-          <h3 style={{ marginTop: 0 }}>🎉 You've finished the hunt</h3>
-          <p>
-            The error has been captured and you're on the last page. Open
-            Sentry → Issues to read the breadcrumbs.
-          </p>
-          <HuntSignals data={huntData} />
-          <p className="muted" style={{ marginTop: 16 }}>
-            Thanks for playing. See <a href="/about">/about</a> for the debrief.
-          </p>
+      {phase === "solved" && (
+        <section className="card debrief">
+          <div
+            style={{
+              display: "inline-block",
+              background: "rgba(129, 199, 132, 0.16)",
+              color: "var(--good)",
+              padding: "6px 14px",
+              borderRadius: 999,
+              fontSize: "0.85em",
+              fontWeight: 600,
+              marginBottom: 16,
+            }}
+          >
+            ✅ Level {content.n} complete
+          </div>
+          <DebriefFull content={content} />
+          <div
+            style={{
+              marginTop: 32,
+              paddingTop: 20,
+              borderTop: "1px solid var(--border)",
+            }}
+          >
+            <button onClick={continueToNext}>
+              Continue to level {content.n + 1} →
+            </button>
+          </div>
         </section>
       )}
 
-      <Debrief content={content} />
+      {phase === "finale" && huntData && (
+        <section className="card debrief">
+          <div
+            style={{
+              display: "inline-block",
+              background: "rgba(129, 199, 132, 0.16)",
+              color: "var(--good)",
+              padding: "6px 14px",
+              borderRadius: 999,
+              fontSize: "0.85em",
+              fontWeight: 600,
+              marginBottom: 16,
+            }}
+          >
+            🎉 Hunt complete
+          </div>
+          <DebriefFull content={content} />
+          <p className="muted" style={{ marginTop: 32 }}>
+            Thanks for playing.
+          </p>
+        </section>
+      )}
     </div>
   );
 }
 
-function HuntSignals({ data }: { data: LevelResponse }) {
+function HuntSignals({
+  data,
+  hintDetails,
+  attendee,
+}: {
+  data: LevelResponse;
+  hintDetails?: LevelContent["hintDetails"];
+  attendee: string;
+}) {
   return (
     <div
       style={{
@@ -162,20 +230,8 @@ function HuntSignals({ data }: { data: LevelResponse }) {
         margin: "16px 0",
       }}
     >
-      {data.traceId && (
-        <p style={{ margin: 0 }}>
-          Trace ID: <code>{data.traceId}</code>
-        </p>
-      )}
-      {data.sentryTraceUrl && (
-        <p style={{ margin: "6px 0 0" }}>
-          <a href={data.sentryTraceUrl} target="_blank" rel="noreferrer">
-            open in sentry →
-          </a>
-        </p>
-      )}
       {data.axiomLogsUrl && (
-        <p style={{ margin: "6px 0 0" }}>
+        <p style={{ margin: 0 }}>
           <a href={data.axiomLogsUrl} target="_blank" rel="noreferrer">
             open axiom logs →
           </a>
@@ -188,30 +244,89 @@ function HuntSignals({ data }: { data: LevelResponse }) {
           </a>
         </p>
       )}
-      <p className="muted" style={{ marginTop: 10 }}>
-        <strong>hint:</strong> {data.hint}
-      </p>
+      <details style={{ marginTop: 10 }}>
+        <summary style={{ cursor: "pointer", color: "var(--muted)" }}>
+          💭 stuck? show me a hint
+        </summary>
+        <p style={{ margin: "10px 0 6px", whiteSpace: "pre-wrap" }}>
+          {data.hint}
+        </p>
+        {hintDetails && (
+          <ol style={{ marginTop: 8 }}>
+            {hintDetails.steps.map((s, i) => (
+              <li key={i}>{renderStep(s, attendee)}</li>
+            ))}
+          </ol>
+        )}
+      </details>
     </div>
   );
 }
 
-function Debrief({ content }: { content: LevelContent }) {
+function DebriefFull({ content }: { content: LevelContent }) {
   return (
-    <details className="card" style={{ marginTop: 18 }}>
-      <summary style={{ cursor: "pointer", fontWeight: 600 }}>
-        💡 once you solve it — takeaways
-      </summary>
-      <ul style={{ marginTop: 12 }}>
-        <li>
-          <strong>What you just did:</strong> {content.debrief.takeaway}
-        </li>
-        <li>
-          <strong>How this scales:</strong> {content.debrief.scalesTo}
-        </li>
-        <li>
-          <strong>Real-world tip:</strong> {content.debrief.realWorldTip}
-        </li>
-      </ul>
-    </details>
+    <article>
+      <h2 style={{ marginTop: 0, marginBottom: 8, color: "var(--accent)" }}>
+        {content.debrief.headline}
+      </h2>
+      <p className="muted" style={{ marginTop: 0 }}>
+        Level {content.n} · {content.title}
+      </p>
+      {content.debrief.sections.map((s, i) => (
+        <section key={i} style={{ marginTop: 28 }}>
+          <h3 style={{ color: "var(--accent-2)", marginBottom: 10 }}>
+            {s.title}
+          </h3>
+          {s.body.map((p, j) => (
+            <p
+              key={j}
+              style={{ lineHeight: 1.6 }}
+              dangerouslySetInnerHTML={{ __html: inlineFmt(p) }}
+            />
+          ))}
+        </section>
+      ))}
+      {content.debrief.readings && content.debrief.readings.length > 0 && (
+        <section style={{ marginTop: 28 }}>
+          <h3 style={{ color: "var(--accent-2)" }}>Further reading</h3>
+          <ul>
+            {content.debrief.readings.map((r, i) => (
+              <li key={i}>
+                <a href={r.url} target="_blank" rel="noreferrer">
+                  {r.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+    </article>
   );
+}
+
+// Replace {attendee} / {dataset} placeholders with live values, then wrap
+// any `monospace` spans (APL queries or field refs) so they render as code.
+function renderStep(step: string, attendee: string): React.ReactNode {
+  const dataset = import.meta.env.VITE_AXIOM_DATASET || "scavenger-prod";
+  const filled = step
+    .replaceAll("{attendee}", attendee)
+    .replaceAll("{dataset}", dataset);
+  // If the line looks like a code block (starts with two spaces or a bracket),
+  // render it in a <code> block for readability.
+  if (/^\s{2,}\[|^\s{2,}\|/.test(filled)) {
+    return <code style={{ display: "block", padding: "4px 8px", margin: "4px 0" }}>{filled.trim()}</code>;
+  }
+  return filled;
+}
+
+// Render **bold** markdown inline so debrief paragraphs can emphasize terms
+// without requiring a full markdown renderer.
+function inlineFmt(s: string): string {
+  const escaped = s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+  return escaped
+    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/`([^`]+)`/g, "<code>$1</code>");
 }

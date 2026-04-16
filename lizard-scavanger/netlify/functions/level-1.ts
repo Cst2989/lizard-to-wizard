@@ -1,7 +1,6 @@
 import { withObservability } from "./_lib/observe.js";
 import { deriveKey, validateKey, formatForLevel } from "./_lib/keys.js";
 import { ok, unauthorized } from "./_lib/http.js";
-import { sentryTraceUrl } from "./_lib/deeplinks.js";
 
 const LEVEL = 1;
 
@@ -18,10 +17,14 @@ export const handler = withObservability("level-1", async (event, obs) => {
 
   return ok({
     ok: true,
-    traceId: obs.traceId,
-    sentryTraceUrl: sentryTraceUrl(obs.traceId),
     hint:
-      "Open Sentry → Traces. Search for this trace ID, expand the 'level-1' span, " +
-      "and read the 'next_key' attribute.",
+      "Grab the 'x-trace-id' from this response's headers (DevTools → " +
+      "Network). Open Sentry → Explore → Traces. Two ways: (a) paste the " +
+      "ID into the URL: https://neciudan.sentry.io/explore/traces/trace/" +
+      "<YOUR_TRACE_ID>/ — or (b) in the search box, type attendee:" +
+      obs.attendee +
+      " to list all your traces. The search box does NOT accept a raw " +
+      "trace ID. Click the 'scavenger.level-1' span to read the 'next_key' " +
+      "attribute.",
   });
 });

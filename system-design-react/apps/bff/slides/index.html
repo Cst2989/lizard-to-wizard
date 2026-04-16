@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=1200" />
+  <title>Backend-for-Frontend (BFF) — Architecture Explained</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css" id="theme" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/monokai.css" />
+
+  <style>
+    :root {
+      --accent: #4fc3f7;
+      --accent-2: #ffb74d;
+      --good: #81c784;
+      --bad: #e57373;
+      --muted: #9aa5b1;
+    }
+    .reveal { font-family: 'Inter', system-ui, -apple-system, Segoe UI, sans-serif; }
+    .reveal h1, .reveal h2, .reveal h3 { text-transform: none; letter-spacing: -0.01em; }
+    .reveal h1 { color: var(--accent); font-size: 2.4em; }
+    .reveal h2 { color: var(--accent); font-size: 1.6em; margin-bottom: 0.4em; }
+    .reveal h3 { color: var(--accent-2); font-size: 1.15em; }
+    .reveal p, .reveal li { font-size: 0.78em; line-height: 1.5; }
+    .reveal pre { font-size: 0.52em; box-shadow: none; }
+    .reveal pre code { padding: 16px 20px; border-radius: 8px; max-height: 520px; }
+    .reveal .muted { color: var(--muted); }
+    .reveal .good { color: var(--good); }
+    .reveal .bad { color: var(--bad); }
+    .reveal .pill {
+      display: inline-block; padding: 4px 12px; border-radius: 999px;
+      background: rgba(79,195,247,0.15); color: var(--accent);
+      font-size: 0.7em; margin: 0 4px 4px 0;
+    }
+    .reveal .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; text-align: left; }
+    .reveal .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; text-align: left; }
+    .reveal .card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px; padding: 18px 22px;
+    }
+    .reveal .card h3 { margin-top: 0; }
+    .reveal .ascii {
+      font-family: 'JetBrains Mono', 'Fira Code', Menlo, monospace;
+      font-size: 0.62em; line-height: 1.45; text-align: left; white-space: pre;
+      background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px; padding: 20px 24px; color: #dfe7ef;
+    }
+    .reveal .kicker { color: var(--accent-2); text-transform: uppercase; letter-spacing: 0.18em; font-size: 0.65em; }
+    .reveal table { font-size: 0.68em; }
+    .reveal table th { color: var(--accent); border-bottom: 1px solid rgba(255,255,255,0.2); }
+    .reveal section.center { text-align: center; }
+    .reveal .footer {
+      position: absolute; bottom: 12px; right: 24px;
+      color: var(--muted); font-size: 0.55em; letter-spacing: 0.1em;
+    }
+    .reveal ul { display: inline-block; text-align: left; }
+    .reveal .no-bullets { list-style: none; padding-left: 0; }
+    .reveal .no-bullets li { margin: 8px 0; }
+    .reveal .tag-good { color: var(--good); font-weight: 600; }
+    .reveal .tag-bad  { color: var(--bad);  font-weight: 600; }
+  </style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+<!-- 1 -->
+<section class="center">
+  <p class="kicker">System Design · React</p>
+  <h1>Backend&nbsp;for&nbsp;Frontend</h1>
+  <p class="muted">A pattern for tailoring APIs to the clients that consume them</p>
+  <p><span class="pill">React 19</span><span class="pill">Express</span><span class="pill">TypeScript</span></p>
+  <div class="footer">1 / 30</div>
+</section>
+
+<!-- 2 -->
+<section>
+  <h2>What is a BFF?</h2>
+  <div class="two-col">
+    <div class="card">
+      <h3>The definition</h3>
+      <p>A <b>Backend for Frontend</b> is a server-side layer that sits between a specific client (web, mobile, TV, etc.) and the broader backend ecosystem.</p>
+      <p>It is <b>owned by the frontend team</b> and exists only to serve that frontend's needs.</p>
+    </div>
+    <div class="card">
+      <h3>The one-liner</h3>
+      <p style="font-size:1em;">Each client gets <b>its own</b> backend — shaped to match how <b>that UI</b> actually works.</p>
+      <p class="muted">Coined by Phil Calçado at SoundCloud (~2015), popularized by Sam Newman.</p>
+    </div>
+  </div>
+  <div class="footer">2 / 30</div>
+</section>
+
+<!-- 3 -->
+<section>
+  <h2>The problem BFF solves</h2>
+  <p>Modern frontends talk to dozens of services. Without a BFF, the browser pays the price:</p>
+  <ul>
+    <li>🌐 <b>Chatty networks</b> — one screen, many round trips</li>
+    <li>🧩 <b>Shape mismatch</b> — services return data the UI doesn't want</li>
+    <li>🔀 <b>Inconsistent conventions</b> — camelCase vs snake_case, cents vs dollars, Kelvin vs Celsius</li>
+    <li>🧠 <b>Business logic bleeds into the client</b> — currency conversion, aggregation, pricing rules</li>
+    <li>🔒 <b>Secrets in the browser</b> — API keys, partner tokens</li>
+  </ul>
+  <div class="footer">3 / 30</div>
+</section>
+
+<!-- 4 -->
+<section>
+  <h2>Without a BFF</h2>
+  <div class="ascii">
+ ┌────────────────┐       ┌──────────────────┐
+ │                │──────▶│  Flights  API    │   camelCase, cents
+ │                │       └──────────────────┘
+ │   React App    │──────▶┌──────────────────┐
+ │  (in browser)  │       │  Hotels   API    │   snake_case, strings
+ │                │       └──────────────────┘
+ │                │──────▶┌──────────────────┐
+ └────────────────┘       │  Weather  API    │   Kelvin, unix ts
+                          └──────────────────┘
+
+  The UI becomes a translator, aggregator, and business layer.
+  </div>
+  <div class="footer">4 / 30</div>
+</section>
+
+<!-- 5 -->
+<section>
+  <h2>With a BFF</h2>
+  <div class="ascii">
+ ┌────────────────┐       ┌─────────────┐       ┌──────────────┐
+ │                │       │             │──────▶│ Flights  API │
+ │   React App    │──────▶│     BFF     │──────▶│ Hotels   API │
+ │  (in browser)  │       │             │──────▶│ Weather  API │
+ │                │       └─────────────┘       └──────────────┘
+ └────────────────┘              │
+       ▲                         │
+       └── one clean request ────┘    aggregates · normalizes · converts
+
+  The UI speaks <b>one</b> language. The BFF absorbs everything else.
+  </div>
+  <div class="footer">5 / 30</div>
+</section>
+
+<!-- 6 -->
+<section>
+  <h2>When you want a BFF</h2>
+  <ul>
+    <li>Your frontend calls <b>3+ services</b> to render a single screen</li>
+    <li>Downstream APIs have <b>inconsistent shapes</b> or conventions</li>
+    <li>You need <b>different shapes per client</b> (web vs mobile vs watch)</li>
+    <li>Mobile cares about <b>payload size &amp; round trips</b></li>
+    <li>You need <b>secrets</b> (API keys) off the client</li>
+    <li>You want <b>frontend teams</b> to own their own integration layer</li>
+  </ul>
+  <div class="footer">6 / 30</div>
+</section>
+
+<!-- 7 -->
+<section>
+  <h2>When a BFF is overkill</h2>
+  <ul>
+    <li>Single backend, single client, clean contract → just use it</li>
+    <li>No aggregation, no transformation, no auth needs</li>
+    <li>A tiny team that will end up maintaining <b>two</b> codebases</li>
+    <li>You already have a well-shaped <b>GraphQL</b> gateway</li>
+  </ul>
+  <p class="muted">Don't add a layer unless it earns its keep.</p>
+  <div class="footer">7 / 30</div>
+</section>
+
+<!-- 8 -->
+<section>
+  <h2>Our demo: a trip planner</h2>
+  <p>A React app lets users search for a trip to a city on given dates.<br/>To render one screen, it needs <b>flights</b>, <b>hotels</b>, and <b>weather</b>.</p>
+  <div class="three-col">
+    <div class="card"><h3>✈️ Flights</h3><p class="muted">Outbound &amp; return options, prices</p></div>
+    <div class="card"><h3>🏨 Hotels</h3><p class="muted">Options, ratings, amenities</p></div>
+    <div class="card"><h3>🌤️ Weather</h3><p class="muted">Daily forecast for the stay</p></div>
+  </div>
+  <p class="muted" style="margin-top:20px;">Three services. Three very different teams. Three very different APIs.</p>
+  <div class="footer">8 / 30</div>
+</section>
+
+<!-- 9 -->
+<section>
+  <h2>The three messy downstreams</h2>
+  <table>
+    <thead><tr><th>Service</th><th>Casing</th><th>Price</th><th>Dates</th><th>Units</th></tr></thead>
+    <tbody>
+      <tr><td>Flights</td><td>camelCase</td><td><code>priceInCents</code></td><td>ISO datetime</td><td>—</td></tr>
+      <tr><td>Hotels</td><td>snake_case</td><td>string <code>"142.50"</code></td><td><code>DD-MM-YYYY</code></td><td>—</td></tr>
+      <tr><td>Weather</td><td>mixed</td><td>—</td><td>unix timestamps</td><td>Kelvin, m/s</td></tr>
+    </tbody>
+  </table>
+  <p class="muted" style="margin-top:24px;">This mess is realistic. Every large company has it.</p>
+  <div class="footer">9 / 30</div>
+</section>
+
+<!-- 10 -->
+<section>
+  <h2>Flights API — raw response</h2>
+  <pre><code class="language-json">{
+  "status": "ok",
+  "data": {
+    "outbound": [
+      {
+        "flightId": "AF0123",
+        "airline": "Air France",
+        "priceInCents": 48900,
+        "departure": "2026-06-01T09:15:00Z",
+        "arrival":   "2026-06-01T10:45:00Z",
+        "segments": [{ "from": "JFK", "to": "CDG" }]
+      }
+    ],
+    "return": [ /* ... */ ]
+  }
+}</code></pre>
+  <p class="muted">Looks OK — until you remember prices are in cents and the UI wants dollars.</p>
+  <div class="footer">10 / 30</div>
+</section>
+
+<!-- 11 -->
+<section>
+  <h2>Hotels API — raw response</h2>
+  <pre><code class="language-json">{
+  "result_code": 200,
+  "hotels_found": [
+    {
+      "hotel_name": "Le Marais Boutique",
+      "star_rating": 4,
+      "price_per_night": "142.50",
+      "address": { "city": "paris", "country": "FR" },
+      "checkin_date":  "01-06-2026",
+      "checkout_date": "07-06-2026"
+    }
+  ]
+}</code></pre>
+  <p class="muted">Snake_case. String prices. Day-first dates. Nested address. Different team, different world.</p>
+  <div class="footer">11 / 30</div>
+</section>
+
+<!-- 12 -->
+<section>
+  <h2>Weather API — raw response</h2>
+  <pre><code class="language-json">{
+  "location": { "city": "Paris", "lat": 48.85, "lon": 2.35 },
+  "forecast": [
+    {
+      "dt": 1780272000,
+      "temp": { "min": 287.4, "max": 295.1 },
+      "wind": { "speed": 4.2, "unit": "m/s" },
+      "pop": 0.35
+    }
+  ],
+  "units": "kelvin"
+}</code></pre>
+  <p class="muted">Kelvin. Unix timestamps. "pop" is probability of precipitation. Don't ask.</p>
+  <div class="footer">12 / 30</div>
+</section>
+
+<!-- 13 -->
+<section>
+  <h2>What the UI actually wants</h2>
+  <pre><code class="language-ts">type TripSummary = {
+  destination: string;
+  flights: FlightOption[];      // priceUsd: number, direction: 'outbound'|'return'
+  hotels:  HotelOption[];       // pricePerNightUsd: number, city: string, amenities: string[]
+  weather: DayForecast[];       // date: ISO, tempMinC: number, tempMaxC: number
+  totals: {
+    cheapestFlightUsd: number;
+    hotelMinUsd: number;
+    estimatedTripUsd: number;
+  };
+};</code></pre>
+  <p class="muted">One clean shape. Consistent casing. Real numbers. Standard units.</p>
+  <div class="footer">13 / 30</div>
+</section>
+
+<!-- 14 -->
+<section>
+  <h2>The BFF's job, in one picture</h2>
+  <div class="ascii">
+   RAW                                        CLEAN
+  ╭─────────────╮                            ╭──────────────╮
+  │ cents       │                            │ USD dollars  │
+  │ snake_case  │    ┌───────────────┐       │ camelCase    │
+  │ Kelvin      │───▶│      BFF      │──────▶│ Celsius      │
+  │ unix ts     │    │ (Express API) │       │ ISO 8601     │
+  │ 3 requests  │    └───────────────┘       │ 1 request    │
+  ╰─────────────╯                            ╰──────────────╯
+
+  Same data. Different language.
+  </div>
+  <div class="footer">14 / 30</div>
+</section>
+
+<!-- 15 -->
+<section>
+  <h2>Responsibility #1 — Aggregation</h2>
+  <p>Fan out. Wait in parallel. Combine.</p>
+  <pre><code class="language-ts">// server/src/bff/tripAggregator.ts
+const [flightsRaw, hotelsRaw, weatherRaw] = await Promise.all([
+  flightsService.get({ origin, dest, from, to }),
+  hotelsService.get({ dest, from, to }),
+  weatherService.get({ city: dest, from, to }),
+]);</code></pre>
+  <p class="muted"><span class="good">Parallel</span>, not sequential. Total latency = slowest service, not the sum.</p>
+  <div class="footer">15 / 30</div>
+</section>
+
+<!-- 16 -->
+<section>
+  <h2>Responsibility #2 — Transformation</h2>
+  <pre><code class="language-ts">function normalizeHotel(raw: RawHotel): HotelOption {
+  return {
+    name:              raw.hotel_name,
+    stars:             raw.star_rating,
+    pricePerNightUsd:  Number(raw.price_per_night),   // string → number
+    city:              raw.address.city,              // flatten
+    amenities:         raw.amenities ?? [],
+  };
+}</code></pre>
+  <p class="muted">The UI never learns the hotel service's quirks.</p>
+  <div class="footer">16 / 30</div>
+</section>
+
+<!-- 17 -->
+<section>
+  <h2>Responsibility #3 — Unit conversion</h2>
+  <pre><code class="language-ts">// Kelvin → Celsius
+const tempMinC = kelvinToC(raw.temp.min);
+const tempMaxC = kelvinToC(raw.temp.max);
+
+// unix seconds → ISO date
+const date = new Date(raw.dt * 1000).toISOString().slice(0, 10);
+
+// cents → dollars
+const priceUsd = raw.priceInCents / 100;</code></pre>
+  <p class="muted">Components should never contain <code>/ 100</code>. That's a smell.</p>
+  <div class="footer">17 / 30</div>
+</section>
+
+<!-- 18 -->
+<section>
+  <h2>Responsibility #4 — Currency</h2>
+  <pre><code class="language-ts">// server/src/services/currencyService.ts
+const rates = loadRates();            // { EUR: 1.08, JPY: 0.0067, ... }
+export const toUsd = (amount: number, currency: string) =>
+  Math.round(amount * rates[currency] * 100) / 100;</code></pre>
+  <p class="muted">All prices hit the UI in one currency. FX logic lives in <b>one</b> place and can be swapped for a real provider later.</p>
+  <div class="footer">18 / 30</div>
+</section>
+
+<!-- 19 -->
+<section>
+  <h2>Responsibility #5 — Derived fields</h2>
+  <pre><code class="language-ts">const cheapestOutbound = min(flights.outbound, f => f.priceUsd);
+const cheapestReturn   = min(flights.return,   f => f.priceUsd);
+const hotelMin         = min(hotels,           h => h.pricePerNightUsd);
+
+const totals = {
+  cheapestFlightUsd: cheapestOutbound.priceUsd + cheapestReturn.priceUsd,
+  hotelMinUsd:       hotelMin.pricePerNightUsd * nights,
+  estimatedTripUsd:  /* sum of both */,
+};</code></pre>
+  <p class="muted">Business rules like "estimated trip cost" belong server-side, not in a React component.</p>
+  <div class="footer">19 / 30</div>
+</section>
+
+<!-- 20 -->
+<section>
+  <h2>The BFF endpoint</h2>
+  <pre><code class="language-ts">// server/src/bff/tripController.ts
+app.get('/api/trip', async (req, res) => {
+  const { dest, from, to } = req.query;
+  const summary = await tripAggregator({ dest, from, to });
+  res.json(summary);   // one clean TripSummary
+});</code></pre>
+  <p>The frontend makes <b>one</b> call. That's the point.</p>
+  <div class="footer">20 / 30</div>
+</section>
+
+<!-- 21 -->
+<section>
+  <h2>The frontend consumption</h2>
+  <pre><code class="language-ts">// web/src/api/client.ts
+export async function getTrip(dest, from, to): Promise&lt;TripSummary&gt; {
+  const r = await fetch(`/api/trip?dest=${dest}&amp;from=${from}&amp;to=${to}`);
+  if (!r.ok) throw new Error('trip fetch failed');
+  return r.json();
+}</code></pre>
+  <pre><code class="language-tsx">// web/src/App.tsx
+const trip = await getTrip(dest, from, to);
+// render &lt;FlightCard&gt;, &lt;HotelCard&gt;, &lt;WeatherBadge&gt;, &lt;PriceBreakdown&gt;</code></pre>
+  <p class="muted">No transformation. No FX. No unit conversion. No orchestration.</p>
+  <div class="footer">21 / 30</div>
+</section>
+
+<!-- 22 -->
+<section>
+  <h2>Type safety end-to-end</h2>
+  <div class="two-col">
+    <div class="card">
+      <h3>Server owns the shape</h3>
+      <p><code>server/src/bff/types.ts</code></p>
+      <ul>
+        <li><code>TripSummary</code></li>
+        <li><code>FlightOption</code></li>
+        <li><code>HotelOption</code></li>
+        <li><code>DayForecast</code></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Web mirrors it</h3>
+      <p><code>web/src/api/types.ts</code></p>
+      <p class="muted">Identical types. In a real repo these would be shared from a single package, or generated from the BFF schema.</p>
+    </div>
+  </div>
+  <div class="footer">22 / 30</div>
+</section>
+
+<!-- 23 -->
+<section>
+  <h2>Benefit — Latency</h2>
+  <div class="two-col">
+    <div class="card">
+      <h3 class="bad">Without BFF</h3>
+      <p>3 sequential fetches from the browser, over a flaky mobile network, through CORS preflights, each with TLS handshake.</p>
+      <p class="bad">~600–900ms</p>
+    </div>
+    <div class="card">
+      <h3 class="good">With BFF</h3>
+      <p>1 browser request. Server does 3 parallel fetches over fast internal network.</p>
+      <p class="good">~150–250ms</p>
+    </div>
+  </div>
+  <div class="footer">23 / 30</div>
+</section>
+
+<!-- 24 -->
+<section>
+  <h2>Benefit — Decoupling</h2>
+  <ul>
+    <li>Hotel service renames <code>hotel_name</code> → <code>name</code>? Fix in <b>one</b> aggregator.</li>
+    <li>Weather provider switches from Kelvin to Celsius? <b>One</b> conversion to delete.</li>
+    <li>New FX provider? <b>One</b> service swap.</li>
+    <li>Frontend never redeploys.</li>
+  </ul>
+  <p class="muted">The BFF is a shock absorber between a volatile service landscape and a stable UI contract.</p>
+  <div class="footer">24 / 30</div>
+</section>
+
+<!-- 25 -->
+<section>
+  <h2>Benefit — Security</h2>
+  <ul>
+    <li>🔑 API keys stay on the server</li>
+    <li>🛡️ Auth tokens can be exchanged, not forwarded</li>
+    <li>🚫 Downstream endpoints never face the internet</li>
+    <li>🎯 Rate limiting applied at one choke point</li>
+    <li>📋 Audit logs in one place</li>
+  </ul>
+  <div class="footer">25 / 30</div>
+</section>
+
+<!-- 26 -->
+<section>
+  <h2>Benefit — Team ownership</h2>
+  <p>The BFF is owned by the <b>frontend</b> team.</p>
+  <ul>
+    <li>They move at UI speed, not platform speed</li>
+    <li>No cross-team ticket to "please add this field"</li>
+    <li>Backend teams expose <b>capabilities</b>; frontend teams compose <b>screens</b></li>
+  </ul>
+  <p class="muted">A BFF is a political pattern as much as a technical one.</p>
+  <div class="footer">26 / 30</div>
+</section>
+
+<!-- 27 -->
+<section>
+  <h2>One BFF per client</h2>
+  <div class="ascii">
+                    ┌───────────────┐
+                    │  Microservices │
+                    └───────────────┘
+                      ▲    ▲    ▲
+          ┌───────────┘    │    └───────────┐
+          │                │                │
+   ┌──────────────┐ ┌──────────────┐ ┌──────────────┐
+   │  Web  BFF    │ │ Mobile  BFF  │ │  TV   BFF    │
+   └──────────────┘ └──────────────┘ └──────────────┘
+          ▲                ▲                ▲
+   ┌──────────────┐ ┌──────────────┐ ┌──────────────┐
+   │   React      │ │  iOS / And.  │ │  Smart TV    │
+   └──────────────┘ └──────────────┘ └──────────────┘
+
+  Each client gets the shape it needs. No lowest-common-denominator API.
+  </div>
+  <div class="footer">27 / 30</div>
+</section>
+
+<!-- 28 -->
+<section>
+  <h2>BFF vs API Gateway vs GraphQL</h2>
+  <table>
+    <thead><tr><th></th><th>API Gateway</th><th>BFF</th><th>GraphQL</th></tr></thead>
+    <tbody>
+      <tr><td>Owned by</td><td>Platform</td><td>Frontend team</td><td>Often platform</td></tr>
+      <tr><td>Per-client shape</td><td class="bad">No</td><td class="good">Yes</td><td class="good">Yes (client chooses)</td></tr>
+      <tr><td>Transforms data</td><td>Minimal</td><td class="good">Heavily</td><td class="good">Via resolvers</td></tr>
+      <tr><td>Sweet spot</td><td>Auth, routing, rate-limit</td><td>Screen-shaped APIs</td><td>Flexible queries, many clients</td></tr>
+    </tbody>
+  </table>
+  <p class="muted" style="margin-top:16px;">They compose: Gateway &rarr; BFF &rarr; services. Or Gateway &rarr; GraphQL &rarr; services.</p>
+  <div class="footer">28 / 30</div>
+</section>
+
+<!-- 29 -->
+<section>
+  <h2>Tradeoffs &amp; pitfalls</h2>
+  <ul>
+    <li><span class="tag-bad">Cost:</span> another deployable to run, monitor, on-call for</li>
+    <li><span class="tag-bad">Duplication:</span> two web and mobile BFFs can grow overlapping code — pull shared logic into libraries</li>
+    <li><span class="tag-bad">Fat BFF:</span> don't let it become a second monolith of business rules that belong in domain services</li>
+    <li><span class="tag-bad">Cache strategy:</span> who caches? BFF, services, or CDN? Pick deliberately</li>
+    <li><span class="tag-good">Observability:</span> instrument the BFF — it's the first place latency regressions show up</li>
+  </ul>
+  <div class="footer">29 / 30</div>
+</section>
+
+<!-- 30 -->
+<section class="center">
+  <p class="kicker">Takeaways</p>
+  <h2>BFF in one breath</h2>
+  <ul class="no-bullets" style="font-size:1.05em;">
+    <li>🎯 <b>Shape the API to the screen</b>, not the screen to the API</li>
+    <li>🔗 <b>Aggregate &amp; normalize</b> so the UI stays simple</li>
+    <li>🏎️ <b>Parallelize</b> downstream calls on a fast internal network</li>
+    <li>🧱 <b>Decouple</b> frontend from downstream churn</li>
+    <li>🔐 <b>Keep secrets</b> and business rules off the client</li>
+    <li>👥 <b>Own it</b> with the frontend team — move at UI speed</li>
+  </ul>
+  <p class="muted" style="margin-top:28px;">Our trip-planner demo is a tiny BFF — but every pattern here scales.</p>
+  <div class="footer">30 / 30</div>
+</section>
+
+</div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: false,
+    transition: 'slide',
+    controls: true,
+    progress: true,
+    center: false,
+    width: 1280,
+    height: 800,
+    margin: 0.06,
+    plugins: [ RevealHighlight ],
+  });
+</script>
+</body>
+</html>

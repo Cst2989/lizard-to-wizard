@@ -82,3 +82,16 @@ input:focus { outline: none; border-color: var(--accent); }
 }
 .hero h1 { font-size: 2.4em; margin: 0 0 12px; color: var(--accent); }
 .hero p  { color: var(--muted); font-size: 1.05em; max-width: 620px; margin: 0 auto; }
+
+.card.debrief {
+  padding: 40px 44px;
+  background: linear-gradient(180deg, rgba(179,136,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
+  border: 1px solid rgba(179,136,255,0.2);
+}
+.card.debrief article p {
+  font-size: 1.02em;
+}
+.card.debrief article code {
+  font-size: 0.9em;
+  background: rgba(255,255,255,0.08);
+}

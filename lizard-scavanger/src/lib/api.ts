@@ -25,8 +25,6 @@ export function register(name: string) {
 
 export type LevelResponse = {
   ok: boolean;
-  traceId?: string;
-  sentryTraceUrl?: string | null;
   axiomLogsUrl?: string | null;
   axiomDashboardUrl?: string | null;
   hint: string;
@@ -35,6 +33,11 @@ export type LevelResponse = {
 export function hitLevel(n: number, attendee: string, key: string) {
   const qs = new URLSearchParams({ attendee, key, level: String(n) });
   return request<LevelResponse>(`/api/level-${n}?${qs}`);
+}
+
+export function validateNextKey(attendee: string, level: number, key: string) {
+  const qs = new URLSearchParams({ attendee, key, level: String(level) });
+  return request<{ ok: boolean }>(`/api/validate?${qs}`);
 }
 
 export function triggerAlert(attendee: string) {

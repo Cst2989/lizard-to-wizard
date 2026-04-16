@@ -31,5 +31,15 @@ export function Level() {
     );
   }
 
-  return <LevelLayout content={content} attendee={attendee} currentKey={key ?? ""} />;
+  // `key` forces a full remount when level OR attendee OR key changes —
+  // otherwise the same <LevelLayout> instance re-renders with new props and
+  // the 'solved'/'hunting' phase state from the previous level leaks through.
+  return (
+    <LevelLayout
+      key={`${levelNum}:${attendee}:${key ?? ""}`}
+      content={content}
+      attendee={attendee}
+      currentKey={key ?? ""}
+    />
+  );
 }

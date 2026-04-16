@@ -9,10 +9,13 @@ export function initClientSentry(): void {
   if (!dsn) return;
   Sentry.init({
     dsn,
-    integrations: [Sentry.browserTracingIntegration()],
-    tracesSampleRate: 1.0,
-    // Propagate trace headers to our own API so server-side spans link up.
-    tracePropagationTargets: ["localhost", /^\//],
+    // Deliberately NO browser tracing — for the workshop we want the trace
+    // shown in Sentry for each level to contain ONLY the backend span with
+    // the key attribute, not 18 browser pageload spans that drown it out.
+    // We still capture unhandled client errors (Issues) and the ErrorBoundary
+    // works for level 6's breadcrumb story.
+    integrations: [],
+    tracesSampleRate: 0,
     environment: import.meta.env.MODE,
   });
 }

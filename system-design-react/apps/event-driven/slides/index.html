@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=1200" />
+  <title>Event-Driven Architecture — Explained</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css" id="theme" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/monokai.css" />
+
+  <style>
+    :root {
+      --accent: #b388ff;
+      --accent-2: #ffd54f;
+      --good: #81c784;
+      --bad: #e57373;
+      --muted: #9aa5b1;
+    }
+    .reveal { font-family: 'Inter', system-ui, -apple-system, Segoe UI, sans-serif; }
+    .reveal h1, .reveal h2, .reveal h3 { text-transform: none; letter-spacing: -0.01em; }
+    .reveal h1 { color: var(--accent); font-size: 2.4em; }
+    .reveal h2 { color: var(--accent); font-size: 1.6em; margin-bottom: 0.4em; }
+    .reveal h3 { color: var(--accent-2); font-size: 1.15em; }
+    .reveal p, .reveal li { font-size: 0.78em; line-height: 1.5; }
+    .reveal pre { font-size: 0.52em; box-shadow: none; }
+    .reveal pre code { padding: 16px 20px; border-radius: 8px; max-height: 520px; }
+    .reveal .muted { color: var(--muted); }
+    .reveal .good { color: var(--good); }
+    .reveal .bad { color: var(--bad); }
+    .reveal .pill {
+      display: inline-block; padding: 4px 12px; border-radius: 999px;
+      background: rgba(179,136,255,0.18); color: var(--accent);
+      font-size: 0.7em; margin: 0 4px 4px 0;
+    }
+    .reveal .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; text-align: left; }
+    .reveal .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; text-align: left; }
+    .reveal .card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px; padding: 18px 22px;
+    }
+    .reveal .card h3 { margin-top: 0; }
+    .reveal .ascii {
+      font-family: 'JetBrains Mono', 'Fira Code', Menlo, monospace;
+      font-size: 0.62em; line-height: 1.45; text-align: left; white-space: pre;
+      background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px; padding: 20px 24px; color: #dfe7ef;
+    }
+    .reveal .kicker { color: var(--accent-2); text-transform: uppercase; letter-spacing: 0.18em; font-size: 0.65em; }
+    .reveal table { font-size: 0.68em; }
+    .reveal table th { color: var(--accent); border-bottom: 1px solid rgba(255,255,255,0.2); }
+    .reveal section.center { text-align: center; }
+    .reveal .footer {
+      position: absolute; bottom: 12px; right: 24px;
+      color: var(--muted); font-size: 0.55em; letter-spacing: 0.1em;
+    }
+    .reveal ul { display: inline-block; text-align: left; }
+    .reveal .no-bullets { list-style: none; padding-left: 0; }
+    .reveal .no-bullets li { margin: 8px 0; }
+    .reveal .tag-good { color: var(--good); font-weight: 600; }
+    .reveal .tag-bad  { color: var(--bad);  font-weight: 600; }
+  </style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+<!-- 1 -->
+<section class="center">
+  <p class="kicker">System Design · React</p>
+  <h1>Event-Driven<br/>Architecture</h1>
+  <p class="muted">Decouple producers from consumers. Let the events flow.</p>
+  <p><span class="pill">React 19</span><span class="pill">Express</span><span class="pill">Server-Sent Events</span><span class="pill">Pub/Sub</span></p>
+  <div class="footer">1 / 30</div>
+</section>
+
+<!-- 2 -->
+<section>
+  <h2>What is Event-Driven Architecture?</h2>
+  <div class="two-col">
+    <div class="card">
+      <h3>The definition</h3>
+      <p>A style where components communicate by <b>emitting</b> and <b>reacting</b> to events — not by calling each other directly.</p>
+      <p>An <b>event</b> is a fact: "a goal was scored at minute 23".</p>
+    </div>
+    <div class="card">
+      <h3>The one-liner</h3>
+      <p style="font-size:1em;">Something happened. Whoever cares, react.</p>
+      <p class="muted">The producer doesn't know — or care — who's listening.</p>
+    </div>
+  </div>
+  <div class="footer">2 / 30</div>
+</section>
+
+<!-- 3 -->
+<section>
+  <h2>Core vocabulary</h2>
+  <ul>
+    <li>📣 <b>Event</b> — an immutable record of something that happened</li>
+    <li>🎙️ <b>Producer / Publisher</b> — emits events (doesn't know consumers)</li>
+    <li>🎧 <b>Consumer / Subscriber</b> — reacts to events (doesn't know producers)</li>
+    <li>🚌 <b>Event bus / broker</b> — routes events from producers to consumers</li>
+    <li>📚 <b>Event log</b> — the ordered history of events (optional, powerful)</li>
+  </ul>
+  <div class="footer">3 / 30</div>
+</section>
+
+<!-- 4 -->
+<section>
+  <h2>Request-response vs event-driven</h2>
+  <div class="ascii">
+  REQUEST / RESPONSE                 EVENT-DRIVEN
+  ────────────────────               ──────────────────────
+  A ──calls──▶ B                      A ──emits──▶  ╔═════╗
+       ▲                                            ║ BUS ║──▶ B
+       └───returns──┘                                ╚═════╝──▶ C
+                                                        └───▶ D
+
+  A knows B exists.                  A knows nothing about B, C, D.
+  Synchronous, tight coupling.       Asynchronous*, loose coupling.
+  </div>
+  <p class="muted">*often — and even synchronous buses still decouple <i>who talks to whom</i>.</p>
+  <div class="footer">4 / 30</div>
+</section>
+
+<!-- 5 -->
+<section>
+  <h2>The mindset shift</h2>
+  <div class="two-col">
+    <div class="card">
+      <h3 class="bad">Imperative</h3>
+      <p>"When a goal is scored, <b>call</b> <code>updateScore()</code>, <b>call</b> <code>addCommentary()</code>, <b>call</b> <code>refreshStats()</code>."</p>
+      <p class="muted">The caller owns the world.</p>
+    </div>
+    <div class="card">
+      <h3 class="good">Reactive</h3>
+      <p>"When a goal is scored, <b>emit</b> <code>GOAL_SCORED</code>. Anyone interested <b>subscribes</b>."</p>
+      <p class="muted">No one owns the world. Events do.</p>
+    </div>
+  </div>
+  <div class="footer">5 / 30</div>
+</section>
+
+<!-- 6 -->
+<section>
+  <h2>When EDA shines</h2>
+  <ul>
+    <li>📊 <b>Live dashboards</b> — sports, markets, IoT, observability</li>
+    <li>🔔 <b>Real-time notifications</b> — chat, alerts, activity feeds</li>
+    <li>🌐 <b>Many consumers for one fact</b> — "order placed" triggers billing, email, warehouse, analytics</li>
+    <li>🕰️ <b>Temporal queries &amp; audit</b> — "what did the state look like at 3pm?"</li>
+    <li>🧩 <b>Loose coupling between teams / services</b> — extensibility without rewrites</li>
+  </ul>
+  <div class="footer">6 / 30</div>
+</section>
+
+<!-- 7 -->
+<section>
+  <h2>When EDA is overkill</h2>
+  <ul>
+    <li>📝 <b>CRUD apps</b> with simple read/write flows</li>
+    <li>💸 <b>Strict consistency</b> requirements (financial txns, inventory)</li>
+    <li>🐌 <b>Infrequent updates</b> — polling or plain REST is enough</li>
+    <li>🔁 <b>Pure request-response</b> flows (login, file upload)</li>
+    <li>🧪 <b>No replay / audit needs</b> — events add overhead with no payoff</li>
+  </ul>
+  <p class="muted">EDA is a power tool. Don't use it to drive a nail.</p>
+  <div class="footer">7 / 30</div>
+</section>
+
+<!-- 8 -->
+<section>
+  <h2>The demo: live football dashboard</h2>
+  <p>A React app streams <b>live match events</b> — goals, cards, subs, VAR — and multiple widgets react in sync.</p>
+  <div class="three-col">
+    <div class="card"><h3>⚽ Scoreboard</h3><p class="muted">Updates on <code>GOAL_SCORED</code></p></div>
+    <div class="card"><h3>🎙️ Commentary</h3><p class="muted">Listens to <code>*</code> (all events)</p></div>
+    <div class="card"><h3>📊 Player stats</h3><p class="muted">Goals, assists, cards per player</p></div>
+    <div class="card"><h3>🗺️ Formation</h3><p class="muted">Subs &amp; red cards on the pitch</p></div>
+    <div class="card"><h3>🧾 Event log</h3><p class="muted">Raw JSON feed (dev tool)</p></div>
+    <div class="card"><h3>⏱️ Time slider</h3><p class="muted">Replay the match to any minute</p></div>
+  </div>
+  <div class="footer">8 / 30</div>
+</section>
+
+<!-- 9 -->
+<section>
+  <h2>Architecture at a glance</h2>
+  <div class="ascii">
+  ┌──────────────────┐       SSE         ┌─────────────────────────┐
+  │                  │ ────────────────▶ │        EventBus         │
+  │  MatchSimulator  │  data: {...}\n\n  │  (singleton, in memory) │
+  │    (server)      │                   │                         │
+  └──────────────────┘                   └─────────────────────────┘
+                                              │  │  │  │  │
+                                              ▼  ▼  ▼  ▼  ▼
+                                    Scoreboard   Commentary   Stats
+                                    Formation    EventLog     Timeline
+
+  One producer → one bus → many independent subscribers (fan-out)
+  </div>
+  <div class="footer">9 / 30</div>
+</section>
+
+<!-- 10 -->
+<section>
+  <h2>Transport choice: SSE vs WS vs polling</h2>
+  <table>
+    <thead><tr><th></th><th>SSE</th><th>WebSocket</th><th>Polling</th></tr></thead>
+    <tbody>
+      <tr><td>Direction</td><td>Server → Client</td><td>Bidirectional</td><td>Client pull</td></tr>
+      <tr><td>Protocol</td><td>HTTP/1.1</td><td>Upgrade</td><td>HTTP</td></tr>
+      <tr><td>Setup</td><td class="good"><code>new EventSource()</code></td><td>Handshake</td><td>Timer loop</td></tr>
+      <tr><td>Auto-reconnect</td><td class="good">Built-in</td><td>Manual</td><td>N/A</td></tr>
+      <tr><td>Overhead</td><td class="good">Low</td><td>Low</td><td class="bad">High</td></tr>
+      <tr><td>Sweet spot</td><td>Live feeds</td><td>Chat, games</td><td>Legacy / rare updates</td></tr>
+    </tbody>
+  </table>
+  <div class="footer">10 / 30</div>
+</section>
+
+<!-- 11 -->
+<section>
+  <h2>Why SSE for this demo</h2>
+  <ul>
+    <li>📡 Events flow <b>one direction</b> — server → client</li>
+    <li>🧰 <b>Plain HTTP</b> — works through proxies, firewalls, CDNs</li>
+    <li>🔄 <b>Browser auto-reconnects</b> out of the box</li>
+    <li>🧱 Text-based, newline-delimited JSON — trivial to parse</li>
+    <li>📦 Tiny API surface — one endpoint, one <code>EventSource</code></li>
+  </ul>
+  <p class="muted">If we needed client-to-server events (chat, collab cursors), WebSocket would win.</p>
+  <div class="footer">11 / 30</div>
+</section>
+
+<!-- 12 -->
+<section>
+  <h2>The event envelope</h2>
+  <pre><code class="language-ts">// web/src/core/types.ts
+interface GameEvent&lt;T = any&gt; {
+  type: string;       // 'GOAL_SCORED', 'CARD_GIVEN', ...
+  payload: T;         // event-specific data
+  timestamp: number;  // minute in match (0–90)
+}</code></pre>
+  <p>Three fields. Everything in the system — server, bus, widgets — speaks this shape.</p>
+  <p class="muted">Narrow contract &rarr; wide reach.</p>
+  <div class="footer">12 / 30</div>
+</section>
+
+<!-- 13 -->
+<section>
+  <h2>The event catalog</h2>
+  <table>
+    <thead><tr><th>Type</th><th>Payload highlights</th></tr></thead>
+    <tbody>
+      <tr><td><code>MATCH_STARTED</code></td><td>home/away team, competition</td></tr>
+      <tr><td><code>GOAL_SCORED</code></td><td>player, team, assist, minute</td></tr>
+      <tr><td><code>CARD_GIVEN</code></td><td>player, team, yellow/red, reason</td></tr>
+      <tr><td><code>SUBSTITUTION</code></td><td>playerIn, playerOut, team</td></tr>
+      <tr><td><code>PENALTY</code> / <code>VAR_REVIEW</code></td><td>decision, scored, original call</td></tr>
+      <tr><td><code>HALF_TIME</code> / <code>MATCH_ENDED</code></td><td>scores, result</td></tr>
+      <tr><td><code>*</code> (wildcard)</td><td>subscribe to <i>everything</i></td></tr>
+    </tbody>
+  </table>
+  <div class="footer">13 / 30</div>
+</section>
+
+<!-- 14 -->
+<section>
+  <h2>A real event on the wire</h2>
+  <pre><code class="language-json">{
+  "type": "GOAL_SCORED",
+  "payload": {
+    "player": "Saka",
+    "team": "home",
+    "assist": "Odegaard",
+    "minute": 23
+  },
+  "timestamp": 23
+}</code></pre>
+  <p class="muted">Immutable. Self-describing. A fact about the world at a moment in time.</p>
+  <div class="footer">14 / 30</div>
+</section>
+
+<!-- 15 -->
+<section>
+  <h2>Server: the MatchSimulator</h2>
+  <pre><code class="language-ts">// server/src/simulator/MatchSimulator.ts
+class MatchSimulator {
+  onEvent(cb: (e: GameEvent) =&gt; void) { this.cb = cb; }
+
+  start() {
+    const tick = () =&gt; {
+      const event = this.events[this.i++];
+      if (!event) return;
+      this.cb(event);
+      setTimeout(tick, 3000 + Math.random() * 5000); // 3–8s
+    };
+    tick();
+  }
+}</code></pre>
+  <p class="muted">Reads pre-scripted events from <code>events.json</code>, emits them at realistic intervals.</p>
+  <div class="footer">15 / 30</div>
+</section>
+
+<!-- 16 -->
+<section>
+  <h2>Server: the SSE endpoint</h2>
+  <pre><code class="language-ts">// server/src/routes/events.ts
+router.get('/matches/:id/stream', (req, res) =&gt; {
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+
+  const sim = new MatchSimulator(req.params.id);
+  sim.onEvent(e =&gt; res.write(`data: ${JSON.stringify(e)}\n\n`));
+  sim.start();
+
+  req.on('close', () =&gt; sim.stop());
+});</code></pre>
+  <p class="muted">SSE is literally: HTTP response that never ends, with <code>data: ...\n\n</code> frames.</p>
+  <div class="footer">16 / 30</div>
+</section>
+
+<!-- 17 -->
+<section>
+  <h2>Client: the EventBus</h2>
+  <pre><code class="language-ts">// web/src/core/EventBus.ts
+class EventBus {
+  private listeners = new Map&lt;string, Set&lt;Handler&gt;&gt;();
+
+  subscribe(type: string, fn: Handler): () =&gt; void {
+    if (!this.listeners.has(type)) this.listeners.set(type, new Set());
+    this.listeners.get(type)!.add(fn);
+    return () =&gt; this.listeners.get(type)?.delete(fn);
+  }
+
+  emit(event: GameEvent) {
+    this.listeners.get(event.type)?.forEach(fn =&gt; fn(event));
+    this.listeners.get('*')?.forEach(fn =&gt; fn(event)); // wildcard
+  }
+}
+export const eventBus = new EventBus(); // singleton</code></pre>
+  <p class="muted">~30 lines. Pub/sub with wildcard support. That's the whole engine.</p>
+  <div class="footer">17 / 30</div>
+</section>
+
+<!-- 18 -->
+<section>
+  <h2>Client: the <code>useEvent</code> hook</h2>
+  <pre><code class="language-ts">// web/src/core/useEvent.ts
+export function useEvent&lt;T&gt;(
+  type: string,
+  handler: (e: GameEvent&lt;T&gt;) =&gt; void
+) {
+  const ref = useRef(handler);
+  ref.current = handler;
+
+  useEffect(() =&gt; {
+    return eventBus.subscribe(type, e =&gt; ref.current(e));
+  }, [type]);
+}</code></pre>
+  <p class="muted">Subscribe on mount. Unsubscribe on unmount. No memory leaks, no ceremony.</p>
+  <div class="footer">18 / 30</div>
+</section>
+
+<!-- 19 -->
+<section>
+  <h2>Client: the SSE bridge</h2>
+  <pre><code class="language-ts">// web/src/api/sse.ts
+export function connectToMatch(id: string) {
+  const src = new EventSource(`/api/matches/${id}/stream`);
+  src.onmessage = msg =&gt; {
+    const event: GameEvent = JSON.parse(msg.data);
+    eventBus.emit(event);   // server events → client bus
+  };
+  return () =&gt; src.close();
+}</code></pre>
+  <p><b>The only file that knows about the server.</b> Everything else talks to the bus.</p>
+  <div class="footer">19 / 30</div>
+</section>
+
+<!-- 20 -->
+<section>
+  <h2>Fan-out: one event, many reactions</h2>
+  <div class="ascii">
+                        ┌─ Scoreboard    → +1 goal, flash
+                        ├─ Commentary    → "GOOOAL! Saka..."
+  GOAL_SCORED  ──emit──▶├─ PlayerStats   → Saka goals++, Odegaard assists++
+                        ├─ Formation     → (ignores)
+                        ├─ EventLog      → append JSON row
+                        └─ Timeline      → append entry
+
+  Every subscriber reacts in one dispatch. No coordination required.
+  </div>
+  <div class="footer">20 / 30</div>
+</section>
+
+<!-- 21 -->
+<section>
+  <h2>Widget: Scoreboard</h2>
+  <pre><code class="language-tsx">export function Scoreboard() {
+  const [home, setHome] = useState(0);
+  const [away, setAway] = useState(0);
+  const [flash, setFlash] = useState(false);
+
+  useEvent(GOAL_SCORED, (e) =&gt; {
+    (e.payload.team === 'home' ? setHome : setAway)(n =&gt; n + 1);
+    setFlash(true);
+    setTimeout(() =&gt; setFlash(false), 600);
+  });
+
+  return &lt;div className={flash ? 'flash' : ''}&gt;{home} — {away}&lt;/div&gt;;
+}</code></pre>
+  <p class="muted">The Scoreboard knows nothing about SSE, HTTP, or other widgets.</p>
+  <div class="footer">21 / 30</div>
+</section>
+
+<!-- 22 -->
+<section>
+  <h2>Widget: Commentary (wildcard)</h2>
+  <pre><code class="language-tsx">export function Commentary() {
+  const [lines, setLines] = useState&lt;string[]&gt;([]);
+
+  useEvent('*', (e) =&gt; {
+    setLines(prev =&gt; [generate(e), ...prev]);
+  });
+
+  return &lt;ul&gt;{lines.map((l, i) =&gt; &lt;li key={i}&gt;{l}&lt;/li&gt;)}&lt;/ul&gt;;
+}</code></pre>
+  <p class="muted">One subscriber, all events. Wildcards make cross-cutting consumers trivial.</p>
+  <div class="footer">22 / 30</div>
+</section>
+
+<!-- 23 -->
+<section>
+  <h2>Widget: PlayerStats</h2>
+  <pre><code class="language-tsx">useEvent(GOAL_SCORED, (e) =&gt; {
+  setPlayers(prev =&gt; {
+    const next = new Map(prev);
+    bump(next, e.payload.player,  'goals');
+    if (e.payload.assist) bump(next, e.payload.assist, 'assists');
+    return next;
+  });
+});
+
+useEvent(CARD_GIVEN,   (e) =&gt; bump(..., e.payload.card === 'red' ? 'red' : 'yellow'));
+useEvent(SUBSTITUTION, (e) =&gt; mark(..., 'subbedOff'));</code></pre>
+  <p class="muted">State is <b>a function of the events that happened</b>. No domain CRUD.</p>
+  <div class="footer">23 / 30</div>
+</section>
+
+<!-- 24 -->
+<section>
+  <h2>End-to-end flow</h2>
+  <div class="ascii">
+  1. Sim timer fires            (server)
+  2. res.write("data: {...}")   (SSE frame sent)
+  3. EventSource.onmessage      (browser parses frame)
+  4. JSON.parse → GameEvent
+  5. eventBus.emit(event)       (client bus)
+  6. Handlers for 'GOAL_SCORED' run — then handlers for '*' run
+  7. setState() in each widget
+  8. React re-renders only what changed
+  9. User sees: score ticks, commentary line appears,
+     stats table updates, timeline grows — all at once.
+
+  Total path: ~ms on a warm connection.
+  </div>
+  <div class="footer">24 / 30</div>
+</section>
+
+<!-- 25 -->
+<section>
+  <h2>Event sourcing, in spirit</h2>
+  <p>The events are <b>the source of truth</b>. State is derived.</p>
+  <ul>
+    <li>🧊 Events are immutable — you don't edit history, you append</li>
+    <li>🔁 Current state = fold over events</li>
+    <li>🕰️ Past state = fold over events up to time <code>T</code></li>
+    <li>🧪 Bug in a widget? Replay the events; no database migration</li>
+  </ul>
+  <p class="muted">This demo isn't full event sourcing (no event store, no snapshots) — but the mindset is the same.</p>
+  <div class="footer">25 / 30</div>
+</section>
+
+<!-- 26 -->
+<section>
+  <h2>Time travel / replay</h2>
+  <pre><code class="language-ts">// features/timeline/TimeSlider.tsx
+async function handleSliderChange(minute: number) {
+  const events = await fetchMatchEvents(matchId, 0, minute);
+  eventBus.clear();                 // reset every widget
+  for (const e of events) eventBus.emit(e);  // re-fold
+}</code></pre>
+  <p>Every widget rebuilds itself from the event log. Fetch → clear → emit.</p>
+  <p class="muted">Impossible in a request/response CRUD world. Free in an event-driven one.</p>
+  <div class="footer">26 / 30</div>
+</section>
+
+<!-- 27 -->
+<section>
+  <h2>Why loose coupling pays off</h2>
+  <ul>
+    <li>➕ <b>New widget</b>? Subscribe and render. Zero other changes.</li>
+    <li>🗑️ <b>Delete a widget</b>? Other widgets don't even notice.</li>
+    <li>🔁 <b>Swap transport</b> (SSE → WS)? Change <code>sse.ts</code>, nothing else.</li>
+    <li>🧪 <b>Testing</b>: emit a fake event, assert UI changed. No HTTP mocking.</li>
+    <li>👥 <b>Teams ship in parallel</b> — as long as the event contract is stable.</li>
+  </ul>
+  <div class="footer">27 / 30</div>
+</section>
+
+<!-- 28 -->
+<section>
+  <h2>Tradeoff: debugging</h2>
+  <div class="two-col">
+    <div class="card">
+      <h3 class="bad">The pain</h3>
+      <p>"Why did the Scoreboard jump to 3?" No caller to trace. Events happen, subscribers react, state mutates in parallel places.</p>
+    </div>
+    <div class="card">
+      <h3 class="good">The cure</h3>
+      <ul>
+        <li>A <code>*</code> subscriber that logs every event</li>
+        <li>An in-UI EventLog (this demo has one)</li>
+        <li>Event names in past tense, with payload keys you can <code>grep</code> for</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer">28 / 30</div>
+</section>
+
+<!-- 29 -->
+<section>
+  <h2>Tradeoffs: delivery, ordering, backpressure</h2>
+  <ul>
+    <li>📮 <b>Delivery</b>: this demo is at-most-once. Miss an event → it's gone. Real systems add queues (Kafka, SQS, Redis Streams).</li>
+    <li>🔢 <b>Ordering</b>: FIFO <i>within</i> a connection. Across reconnects? No guarantee — you need sequence IDs + resume.</li>
+    <li>💨 <b>Backpressure</b>: none here. Fast producer + slow consumer = memory pressure. WS/Kafka let consumers signal "slow down".</li>
+    <li>💓 <b>Heartbeats</b>: production SSE needs comment lines (<code>:\n\n</code>) every 20–30s to keep proxies from killing idle connections.</li>
+    <li>🛡️ <b>Schema</b>: events are forever. Version them. Never rename silently.</li>
+  </ul>
+  <div class="footer">29 / 30</div>
+</section>
+
+<!-- 30 -->
+<section class="center">
+  <p class="kicker">Takeaways</p>
+  <h2>EDA in one breath</h2>
+  <ul class="no-bullets" style="font-size:1.05em;">
+    <li>📣 <b>Emit facts</b>, don't call functions</li>
+    <li>🚌 <b>A bus</b> decouples who from what</li>
+    <li>🧩 <b>Fan-out</b> means new features without touching old ones</li>
+    <li>🕰️ <b>Events = history</b> — replay gives you time travel for free</li>
+    <li>🧠 <b>Pick transport</b> by direction: SSE one-way, WS two-way</li>
+    <li>⚖️ <b>Pay</b> for it in debugging, schema discipline, and delivery guarantees</li>
+  </ul>
+  <p class="muted" style="margin-top:28px;">Our live-match dashboard is a tiny EDA — but the patterns scale to Kafka-sized systems.</p>
+  <div class="footer">30 / 30</div>
+</section>
+
+</div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: false,
+    transition: 'slide',
+    controls: true,
+    progress: true,
+    center: false,
+    width: 1280,
+    height: 800,
+    margin: 0.06,
+    plugins: [ RevealHighlight ],
+  });
+</script>
+</body>
+</html>

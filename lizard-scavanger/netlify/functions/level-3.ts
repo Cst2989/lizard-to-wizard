@@ -1,7 +1,6 @@
 import { withObservability } from "./_lib/observe.js";
 import { deriveKey, validateKey, formatForLevel } from "./_lib/keys.js";
 import { ok, unauthorized } from "./_lib/http.js";
-import { sentryTraceUrl } from "./_lib/deeplinks.js";
 import { Sentry } from "./_lib/sentry.js";
 
 const LEVEL = 3;
@@ -45,13 +44,15 @@ export const handler = withObservability("level-3", async (event, obs) => {
 
   return ok({
     ok: true,
-    traceId: obs.traceId,
-    sentryTraceUrl: sentryTraceUrl(obs.traceId),
     hint:
-      "Open the trace in Sentry. The root span carries `key_fragment_1`; " +
-      "an 'enqueue' child span carries `key_fragment_2`; a 'worker' child " +
-      "span carries `key_fragment_3`. Concatenate them (in order) to form " +
-      "the 8-char key.",
+      "Trace ID → 'x-trace-id' response header. Open Sentry → Explore → " +
+      "Traces. Either paste into the URL path " +
+      "(https://neciudan.sentry.io/explore/traces/trace/<YOUR_TRACE_ID>/) " +
+      "or search for attendee:" +
+      obs.attendee +
+      ". The waterfall has 3 spans. Click 'scavenger.level-3' root for " +
+      "`key_fragment_1`, 'enqueue' child for `key_fragment_2`, 'worker' " +
+      "child for `key_fragment_3`. Concatenate.",
   });
 });
 

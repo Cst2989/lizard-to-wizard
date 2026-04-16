@@ -13,18 +13,20 @@ export const handler = withObservability("level-2", async (event, obs) => {
   }
 
   const nextKey = deriveKey(obs.attendee, LEVEL + 1);
-  const url = event.rawUrl ?? "/level/2";
+  const url = event.rawUrl ?? "/api/level-2";
 
-  // Emit an nginx-style access log and an app log. The app log is what
-  // contains the next key — the attendee must find their trace id from the
-  // nginx log, then search the trace id to land on the app log.
+  // Emit an nginx-style access log and an app log. Include the full path
+  // (with query string) so attendees can filter nginx logs by their name —
+  // exactly like a real access log records ?user_id= or ?tenant=.
+  const parsed = new URL(url, "http://x");
+  const pathWithQuery = parsed.pathname + parsed.search;
   await logToAxiom({
     kind: "nginx",
     attendee: obs.attendee,
     level: LEVEL,
     trace_id: obs.traceId,
     method: event.httpMethod,
-    path: new URL(url, "http://x").pathname,
+    path: pathWithQuery,
     status: 200,
     ua: event.headers["user-agent"] ?? "",
   });
@@ -36,15 +38,18 @@ export const handler = withObservability("level-2", async (event, obs) => {
     msg: `L3 key: ${nextKey}`,
   });
 
+  const dataset = process.env.AXIOM_DATASET || "scavenger-prod";
   return ok({
     ok: true,
     traceId: obs.traceId,
     axiomLogsUrl: axiomLogsUrl(),
     hint:
-      "In Axiom, filter your dataset for `kind == 'nginx'` and `attendee == " +
-      `"${obs.attendee}"`.replace(/`/g, "'") +
-      "`. Pick the log for this page hit, copy its `trace_id`, then search " +
-      "logs again for that trace id to find an app log of the form " +
-      "`L3 key: <key>`.",
+      `Two queries. Two log kinds. One trace_id joins them.\n\n` +
+      `STEP 1 — narrow to YOUR nginx log (gets you the trace_id, NOT the key):\n\n` +
+      `  ['${dataset}'] | where kind == "nginx" and attendee == "${obs.attendee}"\n\n` +
+      `Copy the \`trace_id\` field from the result row.\n\n` +
+      `STEP 2 — pivot to the app log for that same request:\n\n` +
+      `  ['${dataset}'] | where trace_id == "<paste-trace-id-here>"\n\n` +
+      `Two rows come back. The 'app' row's \`msg\` field reads 'L3 key: <KEY>'.`,
   });
 });

@@ -26,13 +26,18 @@ router.get("/", (req: Request, res: Response) => {
     return;
   }
 
-  const filteredForecast = cityData.forecast.filter(
-    (day) => day.dt >= start && day.dt <= end
-  );
+  const SECONDS_PER_DAY = 86400;
+  const daysRequested = Math.max(1, Math.floor((end - start) / SECONDS_PER_DAY) + 1);
+  const daysToReturn = Math.min(daysRequested, cityData.forecast.length);
+
+  const forecast = cityData.forecast.slice(0, daysToReturn).map((day, i) => ({
+    ...day,
+    dt: start + i * SECONDS_PER_DAY,
+  }));
 
   res.json({
     location: cityData.location,
-    forecast: filteredForecast,
+    forecast,
     units: cityData.units,
   });
 });

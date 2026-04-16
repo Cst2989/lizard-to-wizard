@@ -1,6 +1,14 @@
 import type { ObservedResponse } from "./observe.js";
 
-const JSON_HEADERS = { "content-type": "application/json" };
+// Disable every cache we can reach: browser, Netlify Edge, Netlify Durable,
+// any upstream proxy. Scavenger endpoints are side-effectful (emit telemetry,
+// write blobs, fire alerts) and MUST run for every request.
+const JSON_HEADERS = {
+  "content-type": "application/json",
+  "cache-control": "no-store, max-age=0, must-revalidate",
+  "netlify-cdn-cache-control": "no-store",
+  pragma: "no-cache",
+};
 
 export const ok = (body: unknown): ObservedResponse => ({
   statusCode: 200,
