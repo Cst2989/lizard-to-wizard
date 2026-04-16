@@ -148,8 +148,8 @@ export const LEVELS: Record<number, LevelContent> = {
     concept:
       "Every exception becomes an Issue in Sentry, with a trail of what the code was doing before it blew up.",
     lesson: [
-      "Errors without context are useless. Breadcrumbs are a short trail of events leading up to an exception — what the user clicked, what query ran, what request was in flight.",
-      "You'll trigger a deliberate exception here. The breadcrumbs tell you what a production-grade error report looks like.",
+      "Errors without context are useless. Breadcrumbs are a short trail of events leading up to an exception — what the user clicked, what fetch call fired, what console log printed, what server-side work was in flight.",
+      "You'll trigger a deliberate exception here. Sentry will capture both the browser-side breadcrumbs (your clicks and fetches on this page) and the server-side ones (three we add manually in the handler). Together they tell the story of the crash.",
     ],
     instructions: [
       "Click 'Throw the exception' — the server will crash on purpose.",

@@ -1,3 +1,5 @@
+import { tagAttendee } from "./sentry";
+
 const KEY = "attendee_name";
 
 export function getAttendee(): string | null {
@@ -14,6 +16,7 @@ export function setAttendee(name: string): void {
   } catch {
     /* private mode, etc. */
   }
+  tagAttendee(name);
 }
 
 export function clearAttendee(): void {
@@ -22,6 +25,7 @@ export function clearAttendee(): void {
   } catch {
     /* ignore */
   }
+  tagAttendee(null);
 }
 
 export function validateNameInput(raw: string): string | null {
