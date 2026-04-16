@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { register } from "../lib/api";
 import {
@@ -13,6 +13,12 @@ export function Landing() {
   const [name, setName] = useState("");
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+
+  // Pre-warm the Netlify Functions to avoid cold-start lag on the first
+  // level click. Fire-and-forget; we don't care if it fails.
+  useEffect(() => {
+    fetch("/api/health").catch(() => {});
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

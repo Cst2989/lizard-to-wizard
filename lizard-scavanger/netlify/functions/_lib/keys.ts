@@ -9,8 +9,10 @@ export function deriveKey(attendee: string, level: number, format: KeyFormat = "
   hmac.update(`${attendee}:${level}`);
   const digest = hmac.digest();
   if (format === "digits") {
-    const n = digest.readUInt32BE(0) % 1_000_000;
-    return n.toString().padStart(6, "0");
+    // 100000–999999: always 6 digits, no leading zeros so Number/String
+    // round-tripping across the wire is safe.
+    const n = 100_000 + (digest.readUInt32BE(0) % 900_000);
+    return n.toString();
   }
   return digest.toString("hex").slice(0, 8).toUpperCase();
 }

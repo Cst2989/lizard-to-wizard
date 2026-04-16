@@ -1,20 +1,20 @@
 import { withObservability } from "./_lib/observe.js";
-import { deriveKey, validateKey, formatForLevel } from "./_lib/keys.js";
+import { validateKey, formatForLevel } from "./_lib/keys.js";
 import { ok, unauthorized } from "./_lib/http.js";
 import { Sentry } from "./_lib/sentry.js";
 
 const LEVEL = 6;
 
-// Bonus level: deliberately throw, with breadcrumbs that spell the next step
-// in the workshop. The attendee finds the issue in Sentry Issues and reads
-// the breadcrumbs.
+// Bonus level: captures a deliberate exception (without crashing the
+// response) so the attendee can find it in Sentry Issues and read the
+// breadcrumbs. The handler returns 200 so the UI can guide them onward.
 export const handler = withObservability("level-6", async (event, obs) => {
   const key = event.queryStringParameters?.key ?? "";
   if (!validateKey(obs.attendee, LEVEL, key, formatForLevel(LEVEL))) {
     return unauthorized("wrong key for level 6");
   }
 
-  const congrats = `You beat the hunt, ${obs.attendee}! ${deriveKey(obs.attendee, 99)}`;
+  const congrats = `You beat the hunt, ${obs.attendee}!`;
   Sentry.addBreadcrumb({
     category: "scavenger",
     level: "info",
@@ -29,12 +29,24 @@ export const handler = withObservability("level-6", async (event, obs) => {
   Sentry.addBreadcrumb({
     category: "scavenger",
     level: "warning",
-    message: "throwing now — find me in Sentry Issues",
+    message: "captureException about to fire — find me in Sentry Issues",
   });
 
-  // The wrapper will capture this and return 500, which is fine — the
-  // teaching surface is the Sentry Issue with breadcrumbs.
-  throw new Error(`lizard-scavenger bonus: ${obs.attendee}`);
-  // (typescript) — unreachable but keeps types happy
-  return ok({});
+  Sentry.withScope((scope) => {
+    scope.setTag("scavenger_bonus", "true");
+    scope.setTag("attendee", obs.attendee);
+    scope.setLevel("warning");
+    Sentry.captureException(
+      new Error(`lizard-scavenger bonus finale: ${obs.attendee}`),
+    );
+  });
+
+  await obs.log("level_6_completed");
+  return ok({
+    ok: true,
+    hint:
+      "Open Sentry → Issues. Find 'lizard-scavenger bonus finale' tagged " +
+      `attendee=${obs.attendee}. Scroll the breadcrumbs — one of them is ` +
+      "the congratulations you've earned.",
+  });
 });

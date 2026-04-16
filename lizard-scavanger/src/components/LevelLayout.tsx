@@ -4,13 +4,15 @@ import type { LevelContent } from "../levels/content";
 import type { LevelResponse } from "../lib/api";
 import { hitLevel, triggerAlert } from "../lib/api";
 
-type Phase = "lesson" | "hunting" | "next";
+type Phase = "lesson" | "hunting" | "finale";
 
 interface Props {
   content: LevelContent;
   attendee: string;
   currentKey: string;
 }
+
+const FINAL_LEVEL = 6;
 
 export function LevelLayout({ content, attendee, currentKey }: Props) {
   const navigate = useNavigate();
@@ -31,7 +33,7 @@ export function LevelLayout({ content, attendee, currentKey }: Props) {
       return;
     }
     setHuntData(res.data);
-    setPhase("hunting");
+    setPhase(content.n === FINAL_LEVEL ? "finale" : "hunting");
   }
 
   function submitKey(e: React.FormEvent) {
@@ -75,7 +77,9 @@ export function LevelLayout({ content, attendee, currentKey }: Props) {
             <p key={i}>{p}</p>
           ))}
           <button disabled={busy} onClick={startHunting}>
-            {busy ? "Preparing…" : "Start hunting →"}
+            {busy ? "Preparing…" : content.n === FINAL_LEVEL
+              ? "Trigger the error →"
+              : "Start hunting →"}
           </button>
           {error && <p style={{ color: "var(--bad)" }}>{error}</p>}
         </section>
@@ -111,7 +115,7 @@ export function LevelLayout({ content, attendee, currentKey }: Props) {
             {content.n === 5 && (
               <>
                 {" "}
-                (or visit <code>/inbox/{attendee}</code> directly)
+                (or open <a href={`/inbox/${attendee}`}>/inbox/{attendee}</a>)
               </>
             )}
           </p>
@@ -129,6 +133,20 @@ export function LevelLayout({ content, attendee, currentKey }: Props) {
         </section>
       )}
 
+      {phase === "finale" && huntData && (
+        <section className="card" style={{ background: "rgba(129, 199, 132, 0.08)" }}>
+          <h3 style={{ marginTop: 0 }}>🎉 You've finished the hunt</h3>
+          <p>
+            The error has been captured and you're on the last page. Open
+            Sentry → Issues to read the breadcrumbs.
+          </p>
+          <HuntSignals data={huntData} />
+          <p className="muted" style={{ marginTop: 16 }}>
+            Thanks for playing. See <a href="/about">/about</a> for the debrief.
+          </p>
+        </section>
+      )}
+
       <Debrief content={content} />
     </div>
   );
@@ -136,7 +154,14 @@ export function LevelLayout({ content, attendee, currentKey }: Props) {
 
 function HuntSignals({ data }: { data: LevelResponse }) {
   return (
-    <div style={{ background: "rgba(255,255,255,0.04)", padding: 14, borderRadius: 8, margin: "16px 0" }}>
+    <div
+      style={{
+        background: "rgba(255,255,255,0.04)",
+        padding: 14,
+        borderRadius: 8,
+        margin: "16px 0",
+      }}
+    >
       {data.traceId && (
         <p style={{ margin: 0 }}>
           Trace ID: <code>{data.traceId}</code>

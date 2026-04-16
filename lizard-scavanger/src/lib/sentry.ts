@@ -9,18 +9,10 @@ export function initClientSentry(): void {
   if (!dsn) return;
   Sentry.init({
     dsn,
-    integrations: [
-      Sentry.browserTracingIntegration(),
-      Sentry.replayIntegration({
-        maskAllText: false,
-        blockAllMedia: false,
-      }),
-    ],
+    integrations: [Sentry.browserTracingIntegration()],
     tracesSampleRate: 1.0,
     // Propagate trace headers to our own API so server-side spans link up.
     tracePropagationTargets: ["localhost", /^\//],
-    replaysSessionSampleRate: 0,
-    replaysOnErrorSampleRate: 1.0,
     environment: import.meta.env.MODE,
   });
 }

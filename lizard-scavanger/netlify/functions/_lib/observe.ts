@@ -69,10 +69,16 @@ export function withObservability(name: string, inner: Inner): Handler {
         } catch (err) {
           Sentry.captureException(err);
           await log("handler_error", { error: String(err) });
+          // Re-emit to stderr so `netlify dev` shows the trace during local
+          // development; in production Sentry is the source of truth.
+          console.error(`[${name}]`, err);
           return {
             statusCode: 500,
             headers: { "content-type": "application/json" },
-            body: JSON.stringify({ error: "internal" }),
+            body: JSON.stringify({
+              error: "internal",
+              message: err instanceof Error ? err.message : String(err),
+            }),
           };
         }
       },

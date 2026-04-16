@@ -149,9 +149,10 @@ WORKSHOP_SECRET=<the-64-char-hex-string>
 2. `netlify login` (or use the web UI at https://app.netlify.com/).
 3. `netlify init` → link to GitHub → pick the `lizard-scavanger` directory as the site root.
 4. Build settings are auto-detected from `netlify.toml`.
-5. In the Netlify dashboard → **Site settings → Environment variables**, add every var from your local `.env`. **Do not skip any** — missing env vars silently turn off features.
-6. Trigger a deploy (`netlify deploy --prod`).
-7. Visit the URL Netlify hands you.
+5. **Generate a Netlify Personal Access Token** (required for Netlify Blobs from the classic function runtime). Visit https://app.netlify.com/user/applications#personal-access-tokens and create one named `lizard-scavenger-blobs`. Copy it.
+6. In the Netlify dashboard → **Site configuration → Environment variables**, add every var from your local `.env`, **including** `NETLIFY_PAT=<token>`. **Do not skip any** — missing env vars silently turn off features.
+7. Trigger a deploy (`netlify deploy --prod`).
+8. Visit the URL Netlify hands you.
 
 ### 5a. Update the Sentry alert webhook URL
 
