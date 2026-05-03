@@ -1,0 +1,336 @@
+name: Smart Microfrontend Deployment
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+env:
+  NODE_VERSION: '18'
+  PNPM_VERSION: '8'
+
+jobs:
+  # Job 1: Detect which microfrontends have changed
+  detect-changes:
+    name: Detect Changed Microfrontends
+    runs-on: ubuntu-latest
+    outputs:
+      shell: ${{ steps.changes.outputs.shell }}
+      products: ${{ steps.changes.outputs.products }}
+      orders: ${{ steps.changes.outputs.orders }}
+      dashboard: ${{ steps.changes.outputs.dashboard }}
+      shared-ui: ${{ steps.changes.outputs.shared-ui }}
+      slides: ${{ steps.changes.outputs.slides }}
+      any-changed: ${{ steps.changes.outputs.any-changed }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for change detection
+
+      - name: Detect changes
+        id: changes
+        run: |
+          # Get the list of changed files
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }})
+          else
+            CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
+          fi
+
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+
+          # Check if specific apps changed
+          SHELL_CHANGED=false
+          PRODUCTS_CHANGED=false
+          ORDERS_CHANGED=false
+          DASHBOARD_CHANGED=false
+          SHARED_UI_CHANGED=false
+          SLIDES_CHANGED=false
+          ANY_CHANGED=false
+
+          # Check each microfrontend
+          if echo "$CHANGED_FILES" | grep -q "^apps/shell/"; then
+            SHELL_CHANGED=true
+            ANY_CHANGED=true
+            echo "Shell app changed"
+          fi
+
+          if echo "$CHANGED_FILES" | grep -q "^apps/products/"; then
+            PRODUCTS_CHANGED=true
+            ANY_CHANGED=true
+            echo "Products app changed"
+          fi
+
+          if echo "$CHANGED_FILES" | grep -q "^apps/orders/"; then
+            ORDERS_CHANGED=true
+            ANY_CHANGED=true
+            echo "Orders app changed"
+          fi
+
+          if echo "$CHANGED_FILES" | grep -q "^apps/dashboard/"; then
+            DASHBOARD_CHANGED=true
+            ANY_CHANGED=true
+            echo "Dashboard app changed"
+          fi
+
+          if echo "$CHANGED_FILES" | grep -q "^packages/shared-ui/"; then
+            SHARED_UI_CHANGED=true
+            ANY_CHANGED=true
+            echo "Shared UI changed"
+          fi
+
+          if echo "$CHANGED_FILES" | grep -q "^packages/slides/"; then
+            SLIDES_CHANGED=true
+            ANY_CHANGED=true
+            echo "Slides changed"
+          fi
+
+          # If shared-ui changed, we need to rebuild all apps that depend on it
+          if [ "$SHARED_UI_CHANGED" = "true" ]; then
+            SHELL_CHANGED=true
+            PRODUCTS_CHANGED=true
+            ORDERS_CHANGED=true
+            DASHBOARD_CHANGED=true
+            echo "Shared UI changed - triggering rebuild of all dependent apps"
+          fi
+
+          # If slides changed, rebuild dashboard (which depends on it)
+          if [ "$SLIDES_CHANGED" = "true" ]; then
+            DASHBOARD_CHANGED=true
+            echo "Slides changed - triggering rebuild of Dashboard"
+          fi
+
+          # Set outputs
+          echo "shell=$SHELL_CHANGED" >> $GITHUB_OUTPUT
+          echo "products=$PRODUCTS_CHANGED" >> $GITHUB_OUTPUT
+          echo "orders=$ORDERS_CHANGED" >> $GITHUB_OUTPUT
+          echo "dashboard=$DASHBOARD_CHANGED" >> $GITHUB_OUTPUT
+          echo "shared-ui=$SHARED_UI_CHANGED" >> $GITHUB_OUTPUT
+          echo "slides=$SLIDES_CHANGED" >> $GITHUB_OUTPUT
+          echo "any-changed=$ANY_CHANGED" >> $GITHUB_OUTPUT
+
+  # Job 2: Build and deploy Shell app
+  deploy-shell:
+    name: Deploy Shell App
+    needs: detect-changes
+    if: needs.detect-changes.outputs.shell == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Shell
+        run: pnpm --filter @mfe-demo/shell build
+
+      - name: Deploy Shell
+        run: |
+          echo "Deploying Shell app..."
+          echo "Build artifacts are in: apps/shell/dist"
+          # Add your deployment commands here (e.g., AWS S3, Netlify, Vercel, etc.)
+          # Example: aws s3 sync apps/shell/dist s3://your-bucket/shell --delete
+
+  # Job 3: Build and deploy Products app
+  deploy-products:
+    name: Deploy Products App
+    needs: detect-changes
+    if: needs.detect-changes.outputs.products == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Products
+        run: pnpm --filter @mfe-demo/products build
+
+      - name: Deploy Products
+        run: |
+          echo "Deploying Products app..."
+          echo "Build artifacts are in: apps/products/dist"
+          # Add your deployment commands here
+
+  # Job 4: Build and deploy Orders app
+  deploy-orders:
+    name: Deploy Orders App
+    needs: detect-changes
+    if: needs.detect-changes.outputs.orders == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Orders
+        run: pnpm --filter @mfe-demo/orders build
+
+      - name: Deploy Orders
+        run: |
+          echo "Deploying Orders app..."
+          echo "Build artifacts are in: apps/orders/dist"
+          # Add your deployment commands here
+
+  # Job 5: Build and deploy Dashboard app
+  deploy-dashboard:
+    name: Deploy Dashboard App
+    needs: detect-changes
+    if: needs.detect-changes.outputs.dashboard == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Dashboard
+        run: pnpm --filter @mfe-demo/dashboard build
+
+      - name: Deploy Dashboard
+        run: |
+          echo "Deploying Dashboard app..."
+          echo "Build artifacts are in: apps/dashboard/dist"
+          # Add your deployment commands here
+
+  # Job 6: Build and deploy Shared UI
+  deploy-shared-ui:
+    name: Deploy Shared UI
+    needs: detect-changes
+    if: needs.detect-changes.outputs.shared-ui == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Shared UI
+        run: pnpm --filter @mfe-demo/shared-ui build
+
+      - name: Deploy Shared UI
+        run: |
+          echo "Deploying Shared UI..."
+          echo "Build artifacts are in: packages/shared-ui/dist"
+          # Add your deployment commands here
+
+  # Job 7: Build and deploy Slides
+  deploy-slides:
+    name: Deploy Slides
+    needs: detect-changes
+    if: needs.detect-changes.outputs.slides == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Slides
+        run: pnpm --filter @mfe-demo/slides build
+
+      - name: Deploy Slides
+        run: |
+          echo "Deploying Slides..."
+          echo "Build artifacts are in: packages/slides/dist"
+          # Add your deployment commands here
+
+  # Job 8: Deployment summary
+  deployment-summary:
+    name: Deployment Summary
+    needs: [detect-changes, deploy-shell, deploy-products, deploy-orders, deploy-dashboard, deploy-shared-ui, deploy-slides]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Summary
+        run: |
+          echo "## Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Microfrontend | Changed | Deployed |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------------|---------|----------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Shell | ${{ needs.detect-changes.outputs.shell }} | ${{ needs.deploy-shell.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Products | ${{ needs.detect-changes.outputs.products }} | ${{ needs.deploy-products.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Orders | ${{ needs.detect-changes.outputs.orders }} | ${{ needs.deploy-orders.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Dashboard | ${{ needs.detect-changes.outputs.dashboard }} | ${{ needs.deploy-dashboard.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Shared UI | ${{ needs.detect-changes.outputs.shared-ui }} | ${{ needs.deploy-shared-ui.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Slides | ${{ needs.detect-changes.outputs.slides }} | ${{ needs.deploy-slides.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Only changed microfrontends were built and deployed!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Note:** If Slides changed, Dashboard is automatically rebuilt (dependency)." >> $GITHUB_STEP_SUMMARY

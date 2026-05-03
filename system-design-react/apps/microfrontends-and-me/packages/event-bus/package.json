@@ -1,0 +1,8 @@
+{
+  "name": "event-bus",
+  "version": "1.0.0",
+  "description": "Shared event bus for micro frontend communication",
+  "main": "index.ts",
+  "types": "index.ts",
+  "private": true
+}
